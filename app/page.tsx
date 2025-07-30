@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <>
-      <div className="max-w-full min-h-screen py-4 pr-6">
+      <div className="max-w-full min-h-screen">
         <NavBar/>
         <Hero/>
       </div>

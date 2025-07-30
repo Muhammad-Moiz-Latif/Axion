@@ -26,7 +26,7 @@ export default function NavBar() {
                 </div>
 
                 <div className='flex gap-3'>
-                    <button className='bg-white text-black w-[6.2rem] h-9 rounded-[3px] text-[15px]'>Login</button>
+                    <button className='bg-transparent border-[1px] border-white text-white w-[6.2rem] h-9 rounded-[3px] text-[15px]'>Login</button>
                     <button className='w-[6.2rem] h-9 text-white bg-[#DC2626] rounded-[3px] text-[15px]'>Get Started</button>
                 </div>
             </nav>

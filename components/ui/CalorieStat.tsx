@@ -5,7 +5,7 @@ export default function CalorieStat() {
         <>
             <div className="flex justify-between items-center relative">
                 <div className="flex flex-col  items-center absolute -left-[250px] top-[0px] z-20">
-                    <div className='flex justify-center items-center w-full'>
+                    <div className='flex justify-end items-center w-full'>
                         <img src={calories.src} className='size-4 mr-2' /> 
                         <h1 className='mr-[2px] text-xl font-medium'>251</h1>
                         <h1 className='text-[12px] mt-1 text-zinc-400'>kcal</h1>

@@ -22,8 +22,8 @@ export default function Hero() {
                     raysOrigin="top-center"
                     raysColor="#ffffff"
                     raysSpeed={1}
-                    lightSpread={2}
-                    rayLength={0.8}
+                    lightSpread={1.5}
+                    rayLength={0.6}
                     followMouse={true}
                     mouseInfluence={0}
                     noiseAmount={0.2}

@@ -1,6 +1,9 @@
+import { Footer } from "@/components/Footer";
 import Hero from "@/components/Hero";
+import JoinUs from "@/components/JoinUs";
 import LogoSlider from "@/components/LogoSlider";
 import NavBar from "@/components/Nav";
+import Plan from "@/components/Plan";
 import Services from "@/components/Services";
 import Testimonials from "@/components/Testimonials";
 import WhyChooseUs from "@/components/WhyChooseUs";
@@ -25,6 +28,9 @@ export default function Home() {
         <Services/>
         <WhyChooseUs/>
         <Testimonials/>
+        <Plan/>
+        <JoinUs/>
+        <Footer/>
       </div>
     </>
   );

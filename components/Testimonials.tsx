@@ -158,7 +158,7 @@ export default function Testimonials() {
     }
 
     return (
-        <div className={`w-full min-h-[80vh] py-16 bg-black text-white flex flex-col items-center ${arimo.className}`}>
+        <div className={`w-full min-h-[80vh] py-16 bg-black text-white mb-20 flex flex-col items-center ${arimo.className}`}>
             <h1 className="text-center text-5xl tracking-tight">
                 We built Axion to help athletes <br />
                 and achievers train smarter, <br />

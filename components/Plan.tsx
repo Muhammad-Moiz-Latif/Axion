@@ -2,10 +2,9 @@
 
 import { useState, useRef } from "react"
 import { Arimo } from "next/font/google"
-import { motion, useInView , Variants} from "framer-motion"
+import { motion, useInView, Variants } from "framer-motion"
 
 import AnimatedCounter from "./ui/AnimatedCounter"
-import DecryptionText from "./ui/DecryptionText" // Import the new component
 
 const arimo = Arimo({
   variable: "--font-arimo",
@@ -14,7 +13,7 @@ const arimo = Arimo({
 })
 
 // Variants for the main container
-const containerVariants : Variants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
@@ -30,13 +29,13 @@ const containerVariants : Variants = {
 }
 
 // Variants for text elements (title, description)
-const textVariants : Variants = {
+const textVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 }
 
 // Variants for pricing cards
-const cardVariants : Variants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, scale: 0.9 },
   visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: "easeOut" } },
 }
@@ -79,7 +78,7 @@ export default function Plan() {
             </h1>
             <div className="w-[2px] h-12 rotate-20 bg-white"></div>
             <h1 className="text-6xl">
-              <DecryptionText text={currentPriceUnit} duration={0.5} />
+              {currentPriceUnit}
             </h1>
           </div>
           <div className="grid grid-cols-[40%,60%,40%] items-center w-full gap-1 mb-12">
@@ -93,7 +92,7 @@ export default function Plan() {
               ></div>
             </div>
             <h2 className="text-xs text-center uppercase">
-              <DecryptionText text={currentBilledText} duration={0.8} />
+              {currentBilledText}
             </h2>
             <div className="flex justify-center w-full">
               <div
@@ -108,31 +107,29 @@ export default function Plan() {
           <div className="bg-zinc-900 rounded-[3px] flex gap-5 px-2 py-1 border border-zinc-800 mb-1">
             <motion.button
               onClick={() => setSelectedPeriod("quarterly")}
-              className={`py-2 px-3 rounded-[3px] transition-colors duration-75 ${
-                selectedPeriod === "quarterly" ? "bg-zinc-800 border border-zinc-600" : ""
-              }`}
+              className={`py-2 px-3 rounded-[3px] transition-colors duration-75 ${selectedPeriod === "quarterly" ? "bg-zinc-800 border border-zinc-600" : ""
+                }`}
               whileHover={{ backgroundColor: selectedPeriod === "annually" ? "#3f3f46" : undefined }} // bg-zinc-700
             >
               Quarterly
             </motion.button>
             <motion.button
               onClick={() => setSelectedPeriod("annually")}
-              className={`py-2 px-3 rounded-[3px] transition-colors duration-75 ${
-                selectedPeriod === "annually" ? "bg-zinc-800 border border-zinc-600" : ""
-              }`}
+              className={`py-2 px-3 rounded-[3px] transition-colors duration-75 ${selectedPeriod === "annually" ? "bg-zinc-800 border border-zinc-600" : ""
+                }`}
               whileHover={{ backgroundColor: selectedPeriod === "quarterly" ? "#3f3f46" : undefined }} // bg-zinc-700
             >
               Annually
             </motion.button>
           </div>
           <h1 className="text-zinc-400 text-xs text-center uppercase tracking-widest mb-14">
-            <DecryptionText text={currentSavingText} duration={0.8} />
+            {currentSavingText}
           </h1>
           <h1 className="text-center text-sm text-zinc-300 mb-5">
             One simple plan. Full access to everything — workouts, <br />
             nutrition, tools, and community. Just $60 a year.
           </h1>
-          <motion.button whileHover={{scale : 1.05 , cursor : 'pointer'}} className="w-full tracking-tight h-10 rounded-[3px] bg-white text-black">
+          <motion.button whileHover={{ scale: 1.05, cursor: 'pointer' }} className="w-full tracking-tight h-10 rounded-[3px] bg-white text-black">
             Become an Axion Member
           </motion.button>
         </motion.div>
@@ -171,7 +168,7 @@ export default function Plan() {
             No complicated tiers, just one plan that gives you full access to our Vault. Save with the yearly option.
           </h1>
           <div className="relative w-full">
-            <motion.button whileHover={{scale : 1.05 , cursor : 'pointer'}} className="w-full tracking-tight h-[44px] rounded-[3px] bg-black text-white">
+            <motion.button whileHover={{ scale: 1.05, cursor: 'pointer' }} className="w-full tracking-tight h-[44px] rounded-[3px] bg-black text-white">
               Become a Lifetime Member
             </motion.button>
             <h4 className="text-black absolute top-2 right-20 text-[8px]">TM</h4>

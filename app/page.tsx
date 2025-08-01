@@ -15,15 +15,7 @@ export default function Home() {
       <div className="max-w-full min-h-screen">
         <NavBar />
         <Hero />
-        <div className="px-8 flex justify-center">
-          <div
-            className="w-[70%] h-[0.5px] bg-zinc-700 mt-7"
-            style={{
-              maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
-              WebkitMaskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
-            }}
-          ></div>
-        </div>
+  
         <LogoSlider />
         <Services/>
         <WhyChooseUs/>

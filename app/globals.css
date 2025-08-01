@@ -12,6 +12,11 @@
   }
 }
 
+/* This ensures the scrollbar space is always reserved */
+html {
+  overflow-y: scroll;
+}
+
 .animate-slide-left {
   animation: slideLeft 20s linear infinite;
 }
@@ -35,17 +40,16 @@
   position: absolute;
   inset: 0;
   z-index: 10;
-  /* Left and right fade effect */
-  background: linear-gradient(
+  /* Left and right fade effect using mask-image */
+  mask-image: linear-gradient(
     to right,
-    rgb(0, 0, 0) 2%,
-    rgba(255,255,255,0) 10%,
-    rgba(255,255,255,0) 90%,
-    rgb(0, 0, 0) 97%
+    transparent 0% /* Changed from rgb(0,0,0) to transparent for mask effect */,
+    black 10% /* Changed from rgba(255,255,255,0) to black for mask effect */,
+    black 90% /* Changed from rgba(255,255,255,0) to black for mask effect */,
+    transparent 100% /* Changed from rgb(0,0,0) to transparent for mask effect */
   );
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
 }
-
-
 
 @theme inline {
   --color-background: var(--background);

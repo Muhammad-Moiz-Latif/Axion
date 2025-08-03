@@ -27,12 +27,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-black antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <>
+      <NavBar />
+      {children}
+      <JoinUs />
+      <Footer />
+    </>
   );
 }

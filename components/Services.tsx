@@ -22,28 +22,28 @@ const servicesData = [
     title: "Personalized Workout Plans",
     description: "Tailored fitness routines based on your body type, goals, and progress.",
     icon: workoutplan,
-    href: "/services#workout-plans",
+    href: "/services/personalized-workout-plans",
   },
   {
     id: "nutrition-planning",
     title: "Nutrition Planning",
     description: "Custom diet strategies that complement your workouts and optimize health.",
     icon: nutritionplanning,
-    href: "/services#nutrition-planning",
+    href: "/services/nutrition-planning",
   },
   {
     id: "one-on-one-coaching",
     title: "1-on-1 Coaching",
     description: "Direct guidance, motivation, and feedback from certified trainers.",
     icon: coaching,
-    href: "/services#one-on-one-coaching",
+    href: "/services/one-on-one-coaching",
   },
   {
     id: "fitness-challenges",
     title: "Fitness Challenges",
     description: "Engaging goals and competitions to keep you motivated and consistent.",
     icon: routine,
-    href: "/services#fitness-challenges",
+    href: "/services/fitness-challenges",
   },
 ]
 

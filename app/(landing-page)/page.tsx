@@ -13,16 +13,12 @@ export default function Home() {
   return (
     <>
       <div className="max-w-full min-h-screen">
-        <NavBar />
         <Hero />
-  
         <LogoSlider />
         <Services/>
         <WhyChooseUs/>
         <Testimonials/>
         <Plan/>
-        <JoinUs/>
-        <Footer/>
       </div>
     </>
   );

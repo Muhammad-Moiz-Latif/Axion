@@ -73,7 +73,7 @@ export default function Plan() {
           variants={cardVariants}
         >
           <div className="flex items-center justify-center gap-3 mb-3">
-            <h1 className="text-center text-6xl ">
+            <h1 className="text-center text-6xl ">$
               <AnimatedCounter from={selectedPeriod === "annually" ? 25 : 21} to={currentPrice} duration={0.8} />
             </h1>
             <div className="w-[2px] h-12 rotate-20 bg-white"></div>
@@ -149,7 +149,7 @@ export default function Plan() {
                 }}
               ></div>
             </div>
-            <h2 className="text-xs text-center uppercase">$240 Billed annually</h2>
+            <h2 className="text-xs text-center uppercase">lifetime plan</h2>
             <div className="flex justify-center w-full">
               <div
                 className="w-[90%] h-[0.5px] bg-black"

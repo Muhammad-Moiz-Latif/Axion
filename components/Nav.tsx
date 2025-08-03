@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 import logo from "@/assets/AXION.png" // Assuming this path is correct for your logo asset
+import Link from "next/link"
 
 const arimo = Arimo({
   variable: "--font-arimo",
@@ -24,10 +25,10 @@ const navLinks = [
     name: "Services",
     href: "/services",
     dropdown: [
-      { name: "Personalized Workout Plans", href: "/services#workout-plans" },
-      { name: "Nutrition Planning", href: "/services#nutrition-planning" },
-      { name: "1-on-1 Coaching", href: "/services#one-on-one-coaching" },
-      { name: "Fitness Challenges", href: "/services#fitness-challenges" },
+      { name: "Personalized Workout Plans", href: "/services/personalized-workout-plans" },
+      { name: "Nutrition Planning", href: "/services/nutrition-planning" },
+      { name: "1-on-1 Coaching", href: "/services/one-on-one-coaching" },
+      { name: "Fitness Challenges", href: "/services/fitness-challenges" },
     ],
   },
   { name: "FAQ", href: "/faq" },
@@ -119,7 +120,7 @@ export default function NavBar() {
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2 }}
         >
-          Login
+          <Link href='/login'>Login</Link>
         </motion.button>
         <motion.button
           className="w-[6.2rem] h-9 text-white bg-[#DC2626] rounded-[3px] text-[15px] cursor-pointer"

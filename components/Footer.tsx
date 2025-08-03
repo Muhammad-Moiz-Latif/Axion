@@ -4,6 +4,7 @@ import Image from "next/image"
 import { Arimo } from "next/font/google"
 import { motion, useInView , Variants } from "framer-motion"
 import { useRef } from "react"
+import Link from "next/link" // Import Link component
 
 import logo from "../assets/AXION.png"
 
@@ -14,7 +15,7 @@ const arimo = Arimo({
 })
 
 // Variants for the main container
-const containerVariants : Variants =  {
+const containerVariants : Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
@@ -30,12 +31,12 @@ const containerVariants : Variants =  {
 }
 
 // Variants for individual child elements
-const itemVariants : Variants =  {
+const itemVariants : Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 }
 
-const linkItemVariants : Variants =  {
+const linkItemVariants : Variants = {
   hidden: { opacity: 0, x: -10 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } },
 }
@@ -43,6 +44,22 @@ const linkItemVariants : Variants =  {
 export const Footer = () => {
   const footerRef = useRef(null)
   const isInView = useInView(footerRef, { once: true, amount: 0.2 }) // Trigger when 20% in view
+
+  const quickLinks = [
+    { name: "About Us", href: "/about" },
+    { name: "Contact Us", href: "/contact" }, // Assuming a /contact route
+    { name: "FAQ", href: "/faq" },
+    { name: "Privacy Policy", href: "/privacypolicy" }, // Assuming a /privacy-policy route
+    { name: "Services", href: "/services" },
+  ]
+
+  const socialLinks = [
+    { name: "Facebook", href: "#" }, // Placeholder for social links
+    { name: "Instagram", href: "#" },
+    { name: "Twitter", href: "#" },
+    { name: "LinkedIn", href: "#" },
+    { name: "YouTube", href: "#" },
+  ]
 
   return (
     <motion.div
@@ -99,14 +116,14 @@ export const Footer = () => {
               Quick Links
             </motion.h1>
             <ul className="flex flex-col gap-2 text-center sm:text-left">
-              {["About Us", "Contact Us", "FAQ", "Privacy Policy", "Services"].map((link, index) => (
+              {quickLinks.map((link, index) => (
                 <motion.li
                   key={index}
                   className="text-md text-zinc-300 cursor-pointer hover:text-[#DC2626] transition-colors duration-300 tracking-tight"
                   variants={linkItemVariants}
                   whileHover={{ x: 5 }}
                 >
-                  {link}
+                  <Link href={link.href}>{link.name}</Link>
                 </motion.li>
               ))}
             </ul>
@@ -122,14 +139,16 @@ export const Footer = () => {
               Social Links
             </motion.h1>
             <ul className="flex flex-col gap-2 text-center sm:text-left">
-              {["Facebook", "Instagram", "Twitter", "LinkedIn", "YouTube"].map((social, index) => (
+              {socialLinks.map((social, index) => (
                 <motion.li
                   key={index}
                   className="text-md text-zinc-300 cursor-pointer hover:text-[#DC2626] transition-colors duration-300 tracking-tight"
                   variants={linkItemVariants}
                   whileHover={{ x: 5 }}
                 >
-                  {social}
+                  <a href={social.href} target="_blank" rel="noopener noreferrer">
+                    {social.name}
+                  </a>
                 </motion.li>
               ))}
             </ul>

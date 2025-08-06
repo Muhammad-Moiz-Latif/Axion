@@ -1,11 +1,9 @@
 import heartrate from "../../assets/heart-rate.png"
 import StatDisplay from "./StatDisplay"
 
-type HeartStatProps = {
-    delay : number
-}
 
-export default function HeartRateStat({delay} : HeartStatProps) {
+
+export default function HeartRateStat() {
   return (
     <StatDisplay
       icon={heartrate}

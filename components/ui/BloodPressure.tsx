@@ -1,11 +1,8 @@
-import { number } from "framer-motion"
 import bloodpressure from "../../assets/cardiogram.png"
 import StatDisplay from "./StatDisplay"
 
-type BloodPressureStatProps = {
-  delay: number
-}
-export default function BloodPressure({ delay }: BloodPressureStatProps) {
+
+export default function BloodPressure() {
   return (
     <StatDisplay
       icon={bloodpressure}

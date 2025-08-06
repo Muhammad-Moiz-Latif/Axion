@@ -147,8 +147,8 @@ export default function Login() {
                         Forgot Password?
                     </Link>
                     <p className="text-zinc-500">
-                        Don't have an account?{" "}
-                        <Link href="/signup" className="text-[#DC2626] hover:underline transition-colors duration-200">
+                        Don&apos;t have an account?
+                        <Link href="/signup" className="text-[#DC2626] ml-2 hover:underline transition-colors duration-200">
                             Sign Up
                         </Link>
                     </p>

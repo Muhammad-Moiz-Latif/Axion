@@ -73,7 +73,6 @@ const testimonialsData = [
 
 // Triple the testimonials data for infinite loop effect
 const displayedTestimonials = [...testimonialsData, ...testimonialsData, ...testimonialsData]
-const originalLength = testimonialsData.length
 
 // Variants for the main container
 const containerVariants : Variants = {
@@ -114,7 +113,7 @@ export default function Testimonials() {
 
   // activeIndex refers to the index within the displayedTestimonials array
   // We start at the beginning of the middle section for seamless looping
-  const [activeIndex, setActiveIndex] = useState(originalLength)
+  const [activeIndex, setActiveIndex] = useState(testimonialsData.length)
   const testimonialsRef = useRef<HTMLDivElement>(null)
   const isScrolling = useRef(false) // To prevent re-triggering scroll during programmatic jumps
 
@@ -162,18 +161,18 @@ export default function Testimonials() {
       const currentSnappedIndex = Math.round(scrollLeft / cardWidth)
 
       // Teleportation logic
-      if (currentSnappedIndex >= originalLength * 2) {
+      if (currentSnappedIndex >= testimonialsData.length * 2) {
         // Scrolled past the second set, jump back to the start of the second set
         isScrolling.current = true
-        scrollContainer.scrollLeft = originalLength * cardWidth
+        scrollContainer.scrollLeft = testimonialsData.length * cardWidth
         setTimeout(() => (isScrolling.current = false), 0)
-        setActiveIndex(originalLength) // Update active index to reflect the jump
-      } else if (currentSnappedIndex < originalLength) {
+        setActiveIndex(testimonialsData.length) // Update active index to reflect the jump
+      } else if (currentSnappedIndex < testimonialsData.length) {
         // Scrolled before the first set, jump forward to the start of the second set
         isScrolling.current = true
-        scrollContainer.scrollLeft = originalLength * cardWidth
+        scrollContainer.scrollLeft = testimonialsData.length * cardWidth
         setTimeout(() => (isScrolling.current = false), 0)
-        setActiveIndex(originalLength) // Update active index to reflect the jump
+        setActiveIndex(testimonialsData.length) // Update active index to reflect the jump
       } else {
         // If within the middle section, update activeIndex normally
         setActiveIndex(currentSnappedIndex)
@@ -184,11 +183,11 @@ export default function Testimonials() {
     return () => {
       scrollContainer?.removeEventListener("scroll", handleScroll)
     }
-  }, [originalLength]) // Dependencies for useEffect
+  }, []) // Dependencies for useEffect
 
   const handleAvatarClick = (originalIdx: number) => {
     // When clicking an avatar, target the corresponding testimonial in the middle set
-    setActiveIndex(originalIdx + originalLength)
+    setActiveIndex(originalIdx + testimonialsData.length)
   }
 
   const handleTestimonialClick = (index: number) => {
@@ -232,7 +231,7 @@ export default function Testimonials() {
             <button
               onClick={() => handleAvatarClick(index)}
               className={`relative rounded-full transition-all duration-300 ease-in-out hover:border-[#DC2626] p-1
-                          ${(activeIndex % originalLength) === index ? "border-2 border-[#DC2626]" : "border-2 border-transparent"}`}
+                          ${(activeIndex % testimonialsData.length) === index ? "border-2 border-[#DC2626]" : "border-2 border-transparent"}`}
               aria-label={`View testimonial from ${testimonial.name}`}
             >
               <Image
@@ -245,7 +244,7 @@ export default function Testimonials() {
             </button>
             <span
               className={`text-xs font-medium text-white bg-zinc-800 uppercase tracking-wider py-1 px-1 rounded-[3px] transition-opacity duration-300 ${
-                (activeIndex % originalLength) === index ? "opacity-100" : "opacity-0 pointer-events-none"
+                (activeIndex % testimonialsData.length) === index ? "opacity-100" : "opacity-0 pointer-events-none"
               }`}
             >
               {testimonial.name.split(" ")[0]}

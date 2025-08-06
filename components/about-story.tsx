@@ -70,12 +70,12 @@ export default function AboutStory() {
             Axion was founded on the principle that true fitness is built, not born. We started with a vision to
             democratize elite training, making personalized, data-driven methodologies accessible to everyone. Our
             journey began with a small team of passionate trainers and tech innovators, united by a common goal: to
-            redefine what's possible in personal fitness.
+            redefine what&apos;s possible in personal fitness.
           </p>
           <p className=" text-zinc-400 leading-relaxed">
-            From humble beginnings, we've grown into a thriving community, constantly evolving our platform with the
+            From humble beginnings, we&apos;ve grown into a thriving community, constantly evolving our platform with the
             latest in sports science and AI. Every feature, every program, and every piece of content is meticulously
-            crafted to empower you, ensuring your progress is measurable, sustainable, and truly transformative. We're
+            crafted to empower you, ensuring your progress is measurable, sustainable, and truly transformative. We&apos;re
             here to guide you through every rep, every meal, and every milestone.
           </p>
         </motion.div>

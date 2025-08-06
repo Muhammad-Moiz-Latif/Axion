@@ -1,10 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import Image from "next/image" // Import Image component for optimized background
-
-import bg from "../../assets/bicep.png" // Import the background image
 
 import NavBar from "@/components/Nav" // Corrected import path
 import JoinUs from "@/components/JoinUs" // Corrected import path

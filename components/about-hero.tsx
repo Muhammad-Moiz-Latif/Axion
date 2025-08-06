@@ -27,7 +27,7 @@ export default function AboutHero() {
   return (
     <motion.section
       ref={heroRef}
-      className={`relative w-full h-[80vh] flex flex-col items-center justify-center text-white text-center overflow-hidden`}
+      className={`relative w-full h-[80vh] ${arimo.className} flex flex-col items-center justify-center text-white text-center overflow-hidden`}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       variants={{
@@ -54,7 +54,7 @@ export default function AboutHero() {
         Built on Passion, <br /> Driven by Progress.
       </motion.h2>
       <motion.p className="text-sm text-zinc-400 max-w-3xl z-20" variants={textVariants}>
-        At Axion, we believe in the power of transformation. We're more than a fitness platform; we're a community
+        At Axion, we believe in the power of transformation. We&apos;re more than a fitness platform; we&apos;re a community
         dedicated to unlocking human potential through data-driven training and unwavering support.
       </motion.p>
     </motion.section>

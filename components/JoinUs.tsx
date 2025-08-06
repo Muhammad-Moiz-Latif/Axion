@@ -74,7 +74,7 @@ export default function JoinUs() {
         ></div>
       </div>
       <motion.h1 className="text-5xl text-center tracking-tight mb-5" variants={textVariants}>
-        Let's make this official, sign up
+        Let&apos;s make this official, sign up
         <br />
         and start your journey
       </motion.h1>

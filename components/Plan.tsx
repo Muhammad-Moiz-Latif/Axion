@@ -5,6 +5,7 @@ import { Arimo } from "next/font/google"
 import { motion, useInView, Variants } from "framer-motion"
 
 import AnimatedCounter from "./ui/AnimatedCounter"
+import Link from "next/link"
 
 const arimo = Arimo({
   variable: "--font-arimo",
@@ -130,7 +131,7 @@ export default function Plan() {
             nutrition, tools, and community. Just $60 a year.
           </h1>
           <motion.button whileHover={{ scale: 1.05, cursor: 'pointer' }} className="w-full tracking-tight h-10 rounded-[3px] bg-white text-black">
-            Become an Axion Member
+           <Link href="/pricing">Become an Axion Member</Link>
           </motion.button>
         </motion.div>
         {/* Lifetime Plan Card */}

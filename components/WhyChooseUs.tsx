@@ -85,7 +85,7 @@ export default function WhyChooseUs() {
         Why Choose Axion?
       </motion.h1>
       <motion.p className="text-sm text-zinc-400 mb-14 z-10 w-[33rem]" variants={textVariants}>
-        This isn't just another stop — it's the shift you've been waiting for, the moment where discipline meets
+        This isn&apos;t just another stop — it&apos;s the shift you&apos;ve been waiting for, the moment where discipline meets
         direction, and your fitness journey truly begins to transform.
       </motion.p>
 
@@ -116,7 +116,7 @@ export default function WhyChooseUs() {
             <div className="flex flex-col">
               <h1 className="text-2xl mb-1 tracking-tight">Results That Stick</h1>
               <p className="text-sm text-zinc-400">
-                We blend science, structure, and long-term consistency to ensure your growth isn't just temporary — it's
+                We blend science, structure, and long-term consistency to ensure your growth isn&apos;t just temporary — it&apos;s
                 a real, lasting lifestyle shift.
               </p>
             </div>

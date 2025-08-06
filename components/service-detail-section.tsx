@@ -31,7 +31,7 @@ const innerItemVariants: Variants = {
   visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: "easeOut" } },
 }
 
-export default function ServiceDetailSection({ block, index }: ServiceDetailSectionProps) {
+export default function ServiceDetailSection({ block }: ServiceDetailSectionProps) {
   return (
     <motion.div
       className="w-full max-w-6xl mx-auto py-16 px-4"

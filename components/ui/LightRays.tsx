@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client"
 import { useRef, useEffect, useState } from "react"
 import type React from "react"
@@ -31,6 +33,10 @@ interface LightRaysProps {
   className?: string
   flickerOnAppear?: boolean // New prop for flicker effect
 }
+
+
+
+
 
 const DEFAULT_COLOR = "#ffffff"
 
@@ -89,7 +95,7 @@ const LightRays: React.FC<LightRaysProps> = ({
   const mouseRef = useRef({ x: 0.5, y: 0.5 })
   const smoothMouseRef = useRef({ x: 0.5, y: 0.5 })
   const animationIdRef = useRef<number | null>(null)
-  const meshRef = useRef<any>(null)
+  const meshRef = useRef<Mesh | null>(null)
   const cleanupFunctionRef = useRef<(() => void) | null>(null)
 
   const [isVisible, setIsVisible] = useState(false)

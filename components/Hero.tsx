@@ -12,6 +12,7 @@ import BloodPressure from "./ui/BloodPressure"
 
 import bg from "../assets/muscles-wallpaper-5120x2880-photoaidcom-greyscale.jpg"
 import learnmore from "../assets/right-up.png"
+import Link from "next/link"
 
 const arimo = Arimo({
   variable: "--font-arimo",
@@ -60,13 +61,13 @@ export default function Hero() {
         <CalorieStat delay={0.5} />
       </div>
       <div className="absolute right-[35%] bottom-[45%] z-20">
-        <HeartRateStat delay={0.7} />
+        <HeartRateStat  />
       </div>
       <div className="absolute top-[40%] left-[35%] z-20">
-        <MuscleActivation delay={0.9} />
+        <MuscleActivation  />
       </div>
       <div className="absolute top-[45%] right-[32%] z-20">
-        <BloodPressure delay={1.1} />
+        <BloodPressure  />
       </div>
       <div className="absolute bottom-8 flex flex-col gap-1 z-30">
         <motion.h1
@@ -97,7 +98,7 @@ export default function Hero() {
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.2 }}
           >
-            Become a member
+           <Link href="/pricing">Become a member</Link>
           </motion.button>
           <motion.button
             className="py-[9px] text-sm w-[9rem] rounded-[3px] border-[1px] border-white flex justify-center items-center gap-1 cursor-pointer"

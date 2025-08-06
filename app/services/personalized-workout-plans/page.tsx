@@ -160,7 +160,7 @@ export default function DashboardPage() {
                         </p>
                     </motion.div>
                     <div className="grid md:grid-cols-3 gap-8">
-                        {progressData.map((item, index) => (
+                        {progressData.map((item) => (
                             <motion.div
                                 key={item.title}
                                 className="bg-gradient-to-br from-zinc-950 to-black border border-zinc-800 rounded-2xl p-8 shadow-2xl text-center group"

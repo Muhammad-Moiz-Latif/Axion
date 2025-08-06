@@ -1,8 +1,8 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { motion, type Variants } from "framer-motion"
+import Image from "next/image"
 
 interface ServiceOverviewCardProps {
   id: string
@@ -27,7 +27,7 @@ const cardVariants: Variants = {
   },
 }
 
-export default function ServiceOverviewCard({ id, title, description, icon, href }: ServiceOverviewCardProps) {
+export default function ServiceOverviewCard({  title, description, icon, href }: ServiceOverviewCardProps) {
   return (
     <motion.div
       className="flex flex-col items-center justify-center p-6 rounded-md transition-all duration-300 hover:cursor-pointer ease-in-out
@@ -37,7 +37,7 @@ export default function ServiceOverviewCard({ id, title, description, icon, href
       whileTap={{ scale: 0.98 }}
     >
       <Link href={href} className="flex flex-col items-center text-center">
-        <img src={icon || "/placeholder.svg"} alt={title} className="size-16 mb-4" />
+        <Image src={icon || "/placeholder.svg"} alt={title} className="size-16 mb-4" />
         <h3 className="text-4xl font-medium mb-2 text-white tracking-tight">{title}</h3>
         <p className="text-zinc-400 text-center text-sm">{description}</p>
       </Link>

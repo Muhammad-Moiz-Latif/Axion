@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import NavBar from "@/components/Nav"
@@ -81,7 +80,7 @@ export default function ContactPage() {
                     Get In Touch
                 </motion.h1>
                 <motion.p className="text-sm text-zinc-400 max-w-2xl" variants={sectionVariants}>
-                    Have questions, feedback, or just want to say hello? We'd love to hear from you.
+                    Have questions, feedback, or just want to say hello? We&apos;d love to hear from you.
                 </motion.p>
             </motion.section>
 

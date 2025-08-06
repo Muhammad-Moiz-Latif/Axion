@@ -61,7 +61,7 @@ export default function PricingFeatures() {
       variants={containerVariants}
     >
       <motion.h1 className="text-5xl tracking-tight text-center mb-3" variants={featureRowVariants}>
-        What's Included?
+        What&apos;s Included?
       </motion.h1>
       <motion.p className="text-sm text-center text-zinc-400 mb-12" variants={featureRowVariants}>
         Compare our plans and find the perfect fit for your fitness journey.

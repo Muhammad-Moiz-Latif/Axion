@@ -1,10 +1,8 @@
 import bloodsaturation from "../../assets/blood.png"
 import StatDisplay from "./StatDisplay"
 
-type MuscleStatProps = {
-    delay: number
-}
-export default function MuscleActivation({ delay }: MuscleStatProps) {
+
+export default function MuscleActivation() {
     return (
         <StatDisplay
             icon={bloodsaturation}

@@ -3,14 +3,12 @@
 import Plan from "@/components/Plan"
 import PricingFeatures from "@/components/pricing-features"
 import JoinUs from "@/components/JoinUs"
-import Image from "next/image" // Import Image component
 import { Arimo } from "next/font/google"
 import { motion, type Variants } from "framer-motion"
 import { useRef } from "react"
 import { useInView } from "framer-motion"
 import NavBar from "@/components/Nav"
 import { Footer } from "@/components/Footer"
-import bg from '../../assets/samsulek.png';
 
 const arimo = Arimo({
   variable: "--font-arimo",

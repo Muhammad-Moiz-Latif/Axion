@@ -1,6 +1,7 @@
+"use client"
+
 import bloodpressure from "../../assets/cardiogram.png"
 import StatDisplay from "./StatDisplay"
-
 
 export default function BloodPressure() {
   return (
@@ -12,7 +13,7 @@ export default function BloodPressure() {
       lineLength="w-8"
       lineOffset="-left-[28px] top-[19px]"
       statOffset="-left-[155px] top-[18px]"
-      rotateStatBox="rotate-180" // Apply rotation to the entire component and stat box
+      rotateStatBox="rotate-180"
     />
   )
 }

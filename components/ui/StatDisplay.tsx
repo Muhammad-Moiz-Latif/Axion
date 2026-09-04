@@ -1,6 +1,6 @@
 "use client"
 
-import { motion , Variants} from "framer-motion"
+import { motion, type Variants } from "framer-motion"
 import Image from "next/image"
 import type { StaticImageData } from "next/image"
 
@@ -8,43 +8,74 @@ interface StatDisplayProps {
   icon: StaticImageData
   value: string
   unit: string
-  lineRotation: string // Tailwind class for rotation, e.g., '-rotate-26'
-  lineLength: string // Tailwind class for length, e.g., 'w-8'
-  lineOffset: string // Tailwind class for offset, e.g., '-left-[30px] top-[12px]'
-  statOffset: string // Tailwind class for stat box offset, e.g., '-left-[155px] top-[18px]'
-  rotateStatBox?: string // Optional rotation for the stat box itself
-  delay?: number // Stagger delay for the entire component
+  lineRotation: string
+  lineLength: string
+  lineOffset: string
+  statOffset: string
+  rotateStatBox?: string
+  delay?: number
 }
 
-const containerVariants : Variants = {
-  hidden: { opacity: 0 },
+const containerVariants: Variants = {
+  hidden: {
+    opacity: 0,
+  },
+
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2, // Stagger children within this component
-      delayChildren: 0.3, // Delay before children start animating
+      staggerChildren: 0.12,
     },
   },
 }
 
-const circleVariants : Variants = {
-  hidden: { scale: 0, opacity: 0 },
-  visible: { scale: 1, opacity: 1, transition: { duration: 0.3 } },
+const nodeVariants: Variants = {
+  hidden: {
+    scale: 0,
+    opacity: 0,
+  },
+
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 240,
+      damping: 18,
+    },
+  },
 }
 
-const lineVariants : Variants = {
-  hidden: { scaleX: 0, opacity: 0 },
-  visible: { scaleX: 1, opacity: 1, transition: { duration: 0.4, ease: "easeOut" } },
+const lineVariants: Variants = {
+  hidden: {
+    scaleX: 0,
+    opacity: 0,
+  },
+
+  visible: {
+    scaleX: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.65,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
 }
 
-const statBoxVariants : Variants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
-}
+const statVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 8,
+  },
 
-const redLineVariants : Variants = {
-  hidden: { scaleX: 0 },
-  visible: { scaleX: 1, transition: { duration: 0.4, ease: "easeOut" } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.55,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
 }
 
 export default function StatDisplay({
@@ -60,39 +91,185 @@ export default function StatDisplay({
 }: StatDisplayProps) {
   return (
     <motion.div
-      className={`flex justify-between items-center relative ${rotateStatBox || ""}`}
-      variants={containerVariants}
       initial="hidden"
       animate="visible"
-      transition={{ delay: delay }} // Stagger delay for the whole component
+      variants={containerVariants}
+      transition={{ delay }}
+      className={`
+        relative
+        flex
+        items-center
+        justify-between
+        ${rotateStatBox || ""}
+      `}
     >
-      {/* Stat Box */}
+
+      {/* =====================================================
+          ANCHOR NODE
+      ===================================================== */}
+
       <motion.div
-        className={`flex flex-col items-center absolute z-20 ${statOffset} ${rotateStatBox || ""}`}
-        variants={statBoxVariants}
+        variants={nodeVariants}
+        className="
+          relative
+          z-30
+          size-[9px]
+          shrink-0
+          rounded-full
+          border
+          border-white/50
+          bg-[#DC2626]
+          shadow-[0_0_0_3px_rgba(220,38,38,.08),0_0_14px_rgba(220,38,38,.65)]
+        "
       >
-        <div className="flex justify-end items-center w-full">
-          <Image src={icon || "/placeholder.svg"} className="size-5 mr-1" alt={`${unit} icon`} />
-          <h1 className="mr-[2px] text-xl font-medium">{value}</h1>
-          <h1 className="text-[12px] mt-1 text-zinc-400">{unit}</h1>
-        </div>
+
+        {/* tiny pulse */}
         <motion.div
-          className="w-32 h-1 bg-[#DC2626] rounded-tl-full rounded-tr-full origin-left"
-          variants={redLineVariants}
-        ></motion.div>
+          animate={{
+            scale: [1, 1.8, 1],
+            opacity: [0.7, 0, 0.7],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeOut",
+          }}
+          className="
+            absolute
+            inset-[-3px]
+            rounded-full
+            border
+            border-red-500/40
+          "
+        />
+
       </motion.div>
 
-      {/* Connecting Line */}
+
+      {/* =====================================================
+          CONNECTING LINE
+      ===================================================== */}
+
       <motion.div
-        className={`${lineLength} h-[1px] bg-zinc-400 absolute z-10 ${lineRotation} ${lineOffset} origin-left`}
         variants={lineVariants}
-      ></motion.div>
+        className={`
+          absolute
+          z-10
+          h-px
+          origin-left
+          bg-gradient-to-r
+          from-red-500/80
+          via-white/35
+          to-white/5
+          ${lineLength}
+          ${lineRotation}
+          ${lineOffset}
+        `}
+      />
 
-      {/* Base Line (always visible, part of the static structure) */}
-      <div className={`${lineLength} h-[1px] bg-zinc-400 rounded-l-full`}></div>
 
-      {/* Circle Node */}
-      <motion.div className="size-[10px] bg-zinc-400 rounded-full" variants={circleVariants}></motion.div>
+      {/* =====================================================
+          ORIGINAL BASE LINE
+      ===================================================== */}
+
+      <div
+        className={`
+          ${lineLength}
+          h-px
+          rounded-l-full
+          bg-white/10
+        `}
+      />
+
+
+      {/* =====================================================
+          STAT LABEL
+      ===================================================== */}
+
+      <motion.div
+        variants={statVariants}
+        className={`
+          absolute
+          z-40
+          ${statOffset}
+          ${rotateStatBox || ""}
+        `}
+      >
+
+        <div
+          className="
+            relative
+            min-w-[128px]
+            border-l
+            border-white/15
+            bg-black/45
+            px-3
+            py-2.5
+            backdrop-blur-md
+          "
+        >
+
+          {/* red measurement tick */}
+
+          <div className="absolute left-[-1px] top-0 h-4 w-px bg-red-500" />
+
+
+          {/* top row */}
+
+          <div className="flex items-center justify-between gap-5">
+
+            <div className="flex items-center gap-1.5">
+
+              <Image
+                src={icon}
+                alt=""
+                className="size-3.5 object-contain opacity-75"
+              />
+
+              <span className="text-[7px] font-medium uppercase tracking-[0.22em] text-zinc-500">
+                {unit}
+              </span>
+
+            </div>
+
+            <span className="text-[6px] uppercase tracking-[0.2em] text-zinc-700">
+              LIVE
+            </span>
+
+          </div>
+
+
+          {/* value */}
+
+          <div className="mt-1 flex items-baseline gap-1">
+
+            <span className="text-[21px] font-medium leading-none tracking-[-0.04em] text-white">
+              {value}
+            </span>
+
+            <span className="text-[7px] uppercase tracking-[0.18em] text-zinc-600">
+              measured
+            </span>
+
+          </div>
+
+
+          {/* measurement bar */}
+
+          <div className="mt-2 flex items-center gap-1">
+
+            <span className="h-[2px] w-6 bg-red-500" />
+
+            <span className="h-px w-3 bg-white/10" />
+
+            <span className="h-px w-2 bg-white/10" />
+
+          </div>
+
+        </div>
+
+      </motion.div>
+
     </motion.div>
   )
 }

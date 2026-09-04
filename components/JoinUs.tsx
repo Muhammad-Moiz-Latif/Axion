@@ -1,8 +1,9 @@
 "use client"
 
-import { Arimo } from 'next/font/google'
 import Image from "next/image"
-import { motion, useInView, Variants } from "framer-motion"
+import Link from "next/link"
+import { Arimo } from "next/font/google"
+import { motion, useInView, type Variants } from "framer-motion"
 import { useRef } from "react"
 
 import p1 from "../assets/p1.png"
@@ -16,103 +17,339 @@ const arimo = Arimo({
   subsets: ["latin"],
 })
 
-// Variants for the main container
-const containerVariants : Variants = {
-  hidden: { opacity: 0, y: 50 },
+const containerVariants: Variants = {
+  hidden: {},
   visible: {
-    opacity: 1,
-    y: 0,
     transition: {
-      duration: 0.8,
-      ease: "easeOut",
-      delay: 0.5, // Delay after previous section (Plan)
-      when: "beforeChildren",
       staggerChildren: 0.1,
+      delayChildren: 0.1,
     },
   },
 }
 
-// Variants for text elements
-const textVariants : Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+const revealVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 25,
+    filter: "blur(7px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.75,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
 }
 
-// Variants for individual avatars
-const avatarVariants : Variants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.4, ease: "easeOut" } },
-}
-
-// Variants for buttons
-const buttonVariants : Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut", delay: 0.3 } },
+const avatarVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.7,
+    x: -8,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    x: 0,
+    transition: {
+      duration: 0.45,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
 }
 
 export default function JoinUs() {
-  const joinUsRef = useRef(null)
-  const isInView = useInView(joinUsRef, { once: true, amount: 0.3 }) // Trigger when 30% in view
+  const joinUsRef = useRef<HTMLElement | null>(null)
+
+  const isInView = useInView(joinUsRef, {
+    once: true,
+    amount: 0.3,
+  })
 
   const avatars = [p1, p2, p3, p4]
 
   return (
-    <motion.div
+    <section
       ref={joinUsRef}
-      className={`w-full h-[50vh] bg-black text-white ${arimo.className} flex flex-col items-center`}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      variants={containerVariants}
+      className={`${arimo.className} relative overflow-hidden bg-[#050505] text-white`}
     >
-      <div className="flex justify-center w-full mb-10">
+      {/* ================================================================ */}
+      {/* BACKGROUND                                                       */}
+      {/* ================================================================ */}
+
+      <div className="pointer-events-none absolute inset-0">
         <div
-          className="w-[90%] h-[0.5px] bg-zinc-700"
+          className="absolute inset-0 opacity-[0.035]"
           style={{
-            maskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
-            WebkitMaskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
+            backgroundImage: `
+              linear-gradient(to right, rgba(255,255,255,.5) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(255,255,255,.5) 1px, transparent 1px)
+            `,
+            backgroundSize: "80px 80px",
           }}
-        ></div>
+        />
+
+        <div className="absolute left-1/2 top-1/2 h-[450px] w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-600/[0.05] blur-[140px]" />
+
+        <div className="absolute left-0 top-1/2 h-px w-full bg-white/[0.04]" />
       </div>
-      <motion.h1 className="text-5xl text-center tracking-tight mb-5" variants={textVariants}>
-        Let&apos;s make this official, sign up
-        <br />
-        and start your journey
-      </motion.h1>
+
+      {/* ================================================================ */}
+      {/* CORNERS                                                          */}
+      {/* ================================================================ */}
+
+      <div className="pointer-events-none absolute left-5 top-5 h-10 w-10 border-l border-t border-white/10 md:left-10 md:top-10" />
+
+      <div className="pointer-events-none absolute right-5 top-5 h-10 w-10 border-r border-t border-white/10 md:right-10 md:top-10" />
+
+      <div className="pointer-events-none absolute bottom-5 left-5 h-10 w-10 border-b border-l border-white/10 md:bottom-10 md:left-10" />
+
+      <div className="pointer-events-none absolute bottom-5 right-5 h-10 w-10 border-b border-r border-white/10 md:bottom-10 md:right-10" />
+
+      {/* ================================================================ */}
+      {/* CONTENT                                                          */}
+      {/* ================================================================ */}
+
       <motion.div
-        className="flex gap-3 items-center mb-5"
-        variants={{
-          visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
-        }}
+        variants={containerVariants}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+        className="relative mx-auto max-w-[1500px] px-5 py-24 sm:px-8 lg:px-12 lg:py-32"
       >
-        <div className="flex">
-          {avatars.map((avatar, index) => (
-            <motion.div key={index} variants={avatarVariants}>
-              <Image src={avatar || "/placeholder.svg"} className="rounded-full size-5 object-contain" alt={`Avatar ${index + 1}`} />
+        {/* Top line */}
+
+        <motion.div
+          variants={revealVariants}
+          className="mb-12 flex items-center justify-between border-b border-white/[0.08] pb-5"
+        >
+          <div className="flex items-center gap-3">
+            <span className="h-1.5 w-1.5 rounded-full bg-red-600 shadow-[0_0_12px_rgba(220,38,38,.8)]" />
+
+            <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-red-500">
+              AXION / ACCESS PROTOCOL
+            </span>
+          </div>
+
+          <span className="hidden font-mono text-[9px] uppercase tracking-[0.2em] text-white/20 sm:block">
+            FINAL STEP / 001
+          </span>
+        </motion.div>
+
+        {/* Main */}
+
+        <div className="grid items-center gap-14 lg:grid-cols-[1fr_0.7fr]">
+          {/* LEFT */}
+
+          <div>
+            <motion.p
+              variants={revealVariants}
+              className="mb-5 text-[10px] uppercase tracking-[0.3em] text-white/30"
+            >
+              Your next phase starts here.
+            </motion.p>
+
+            <motion.h2
+              variants={revealVariants}
+              className="max-w-4xl text-[clamp(3rem,7vw,7.5rem)] font-semibold leading-[0.86] tracking-[-0.06em]"
+            >
+              Stop waiting.
+              <br />
+
+              <span className="text-white/30">
+                Start training.
+              </span>
+            </motion.h2>
+
+            <motion.p
+              variants={revealVariants}
+              className="mt-8 max-w-xl text-sm leading-7 text-white/35"
+            >
+              Join a performance system designed to
+              evolve with you. Train with structure.
+              Measure your progress. Build something
+              that lasts.
+            </motion.p>
+
+            {/* Members */}
+
+            <motion.div
+              variants={revealVariants}
+              className="mt-10 flex items-center gap-5"
+            >
+              <div className="flex items-center">
+                {avatars.map((avatar, index) => (
+                  <motion.div
+                    key={index}
+                    variants={avatarVariants}
+                    className={`relative h-9 w-9 overflow-hidden rounded-full border border-[#050505] ${index !== 0 ? "-ml-2" : ""
+                      }`}
+                  >
+                    <Image
+                      src={avatar}
+                      alt={`Axion member ${index + 1}`}
+                      fill
+                      sizes="36px"
+                      className="object-cover grayscale"
+                    />
+                  </motion.div>
+                ))}
+              </div>
+
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/60">
+                  1,025+ ACTIVE MEMBERS
+                </p>
+
+                <p className="mt-1 text-[9px] uppercase tracking-[0.14em] text-white/20">
+                  Training with intention
+                </p>
+              </div>
             </motion.div>
-          ))}
+          </div>
+
+          {/* RIGHT / ACCESS MODULE */}
+
+          <motion.div
+            variants={revealVariants}
+            className="relative border border-white/[0.09] bg-[#090909]"
+          >
+            {/* Header */}
+
+            <div className="flex items-center justify-between border-b border-white/[0.07] px-6 py-4">
+              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">
+                MEMBERSHIP
+              </span>
+
+              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-red-500">
+                OPEN
+              </span>
+            </div>
+
+            <div className="relative p-6 md:p-8">
+              {/* Giant number */}
+
+              <span className="pointer-events-none absolute right-4 top-2 font-mono text-[110px] leading-none text-white/[0.025]">
+                01
+              </span>
+
+              <div className="relative">
+                <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-red-500">
+                  ACCESS REQUEST
+                </p>
+
+                <p className="mt-3 text-lg font-medium tracking-[-0.02em] text-white">
+                  Become part of Axion.
+                </p>
+
+                <p className="mt-2 text-xs leading-6 text-white/30">
+                  Full access to the training ecosystem,
+                  tools, programming and community.
+                </p>
+              </div>
+
+              {/* Status */}
+
+              <div className="mt-10 space-y-4 border-y border-white/[0.07] py-5">
+                {[
+                  "Adaptive training system",
+                  "Performance tracking",
+                  "Nutrition & recovery tools",
+                  "Axion member community",
+                ].map((item, index) => (
+                  <div
+                    key={item}
+                    className="flex items-center justify-between"
+                  >
+                    <span className="text-[10px] uppercase tracking-[0.12em] text-white/35">
+                      {item}
+                    </span>
+
+                    <span className="font-mono text-[8px] text-red-500">
+                      0{index + 1}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA */}
+
+              <Link href="/pricing" className="block mt-7">
+                <motion.div
+                  initial="rest"
+                  whileHover="hover"
+                  className="relative flex h-12 items-center justify-center overflow-hidden hover:text-red-600 bg-red-600 text-white"
+                >
+                  <motion.div
+                    variants={{
+                      rest: { x: "-101%" },
+                      hover: { x: "0%" },
+                    }}
+                    transition={{
+                      duration: 0.45,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="absolute inset-0 bg-white"
+                  />
+
+                  <span className="relative z-10 text-[10px] font-semibold  uppercase tracking-[0.15em] transition-colors">
+                    Become an Axion Member
+                  </span>
+
+                  <motion.span
+                    variants={{
+                      rest: { x: 0 },
+                      hover: { x: 5 },
+                    }}
+                    className="relative z-10 ml-4"
+                  >
+                    →
+                  </motion.span>
+                </motion.div>
+              </Link>
+
+              <p className="mt-4 text-center font-mono text-[8px] uppercase tracking-[0.18em] text-white/25">
+                No hidden charges / No unnecessary tiers
+              </p>
+            </div>
+
+            {/* Scan line */}
+
+            <motion.div
+              initial={{ x: "-100%" }}
+              whileInView={{ x: "100%" }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 1.8,
+                delay: 0.8,
+                ease: "linear",
+              }}
+              className="pointer-events-none absolute left-0 top-0 h-px w-1/3 bg-gradient-to-r from-transparent via-red-500 to-transparent"
+            />
+          </motion.div>
         </div>
-        <motion.h1 className="text-xs text-zinc-400" variants={textVariants}>
-          1025+ active members
-        </motion.h1>
+
+        {/* Bottom telemetry */}
+
+        <motion.div
+          variants={revealVariants}
+          className="mt-16 flex flex-col gap-4 border-t border-white/[0.07] pt-5 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <span className="font-mono text-[8px] uppercase tracking-[0.22em] text-white/25">
+            AXION PERFORMANCE SYSTEM
+          </span>
+
+          <div className="flex items-center gap-3">
+            <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+
+            <span className="font-mono text-[8px] uppercase tracking-[0.22em] text-white/25">
+              READY FOR INPUT
+            </span>
+          </div>
+        </motion.div>
       </motion.div>
-      <motion.button
-        className="bg-[#DC2626] text-white text-sm tracking-tight px-5 py-3 rounded-[3px]"
-        variants={buttonVariants}
-        whileHover={{ scale: 1.05, boxShadow: "0 0 10px rgba(220, 38, 38, 0.5)" }}
-        whileTap={{ scale: 0.95 }}
-        transition={{ duration: 0.2 }}
-      >
-        Become a member
-      </motion.button>
-      <div className="flex justify-center w-full mt-10">
-        <div
-          className="w-[90%] h-[0.5px] bg-zinc-700"
-          style={{
-            maskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
-            WebkitMaskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
-          }}
-        ></div>
-      </div>
-    </motion.div>
+    </section>
   )
 }

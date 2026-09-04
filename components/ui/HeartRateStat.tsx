@@ -1,7 +1,7 @@
+"use client"
+
 import heartrate from "../../assets/heart-rate.png"
 import StatDisplay from "./StatDisplay"
-
-
 
 export default function HeartRateStat() {
   return (
@@ -13,7 +13,7 @@ export default function HeartRateStat() {
       lineLength="w-32"
       lineOffset="-left-[123px] -top-[22px]"
       statOffset="-left-[250px] top-[-23px]"
-      rotateStatBox="rotate-180" // Apply rotation to the entire component and stat box
+      rotateStatBox="rotate-180"
     />
   )
 }

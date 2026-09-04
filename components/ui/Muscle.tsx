@@ -1,6 +1,7 @@
+"use client"
+
 import bloodsaturation from "../../assets/blood.png"
 import StatDisplay from "./StatDisplay"
-
 
 export default function MuscleActivation() {
     return (

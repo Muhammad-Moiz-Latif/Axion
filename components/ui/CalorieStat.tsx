@@ -1,3 +1,5 @@
+"use client"
+
 import { motion } from "framer-motion"
 import calories from "../../assets/calories.png"
 import StatDisplay from "./StatDisplay"
@@ -6,12 +8,24 @@ type CalorieStatProps = {
   delay: number
 }
 
-export default function CalorieStat({ delay }: CalorieStatProps) {
+export default function CalorieStat({
+  delay,
+}: CalorieStatProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.5 }}
+      initial={{
+        opacity: 0,
+        y: 10,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      transition={{
+        delay,
+        duration: 0.5,
+        ease: "easeOut",
+      }}
     >
       <StatDisplay
         icon={calories}
@@ -20,7 +34,7 @@ export default function CalorieStat({ delay }: CalorieStatProps) {
         lineRotation="-rotate-12"
         lineLength="w-32"
         lineOffset="-left-[125px] top-[31px]"
-        statOffset="-left-[250px] top-[0px]"
+        statOffset="-left-[230px] top-[0px]"
       />
     </motion.div>
   )

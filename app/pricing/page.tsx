@@ -1,12 +1,10 @@
 "use client"
 
+import { Arimo } from "next/font/google"
+
 import Plan from "@/components/Plan"
 import PricingFeatures from "@/components/pricing-features"
 import JoinUs from "@/components/JoinUs"
-import { Arimo } from "next/font/google"
-import { motion, type Variants } from "framer-motion"
-import { useRef } from "react"
-import { useInView } from "framer-motion"
 import NavBar from "@/components/Nav"
 import { Footer } from "@/components/Footer"
 
@@ -16,70 +14,78 @@ const arimo = Arimo({
   subsets: ["latin"],
 })
 
-// Variants for the main page container to trigger overall entrance
-const pageContainerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.5,
-      ease: "easeOut",
-      when: "beforeChildren",
-      staggerChildren: 0.2, // Stagger sections
-    },
-  },
-}
-
-// Variants for individual sections
-const sectionVariants: Variants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
-}
-
 export default function PricingPage() {
-  const pageRef = useRef(null)
-  const isInView = useInView(pageRef, { once: true, amount: 0.1 }) // Trigger when 10% of the page is in view
-
   return (
-    <motion.div
-      ref={pageRef}
-      className={`flex min-h-screen flex-col items-center justify-center bg-black ${arimo.className}`}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      variants={pageContainerVariants}
+    <main
+      className={`${arimo.className} relative min-h-screen overflow-hidden bg-[#050505] text-white`}
     >
+      {/* ================================================================
+          GLOBAL ATMOSPHERE
+      ================================================================ */}
+
+      <div className="pointer-events-none fixed inset-0 z-0">
+        {/* Technical grid */}
+        <div
+          className="absolute inset-0 opacity-[0.028]"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(255,255,255,.6) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(255,255,255,.6) 1px, transparent 1px)
+            `,
+            backgroundSize: "80px 80px",
+          }}
+        />
+
+        {/* Fine center axis */}
+        <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/[0.018]" />
+
+        {/* Ambient red */}
+        <div className="absolute left-1/2 top-[18%] h-[650px] w-[650px] -translate-x-1/2 rounded-full bg-red-600/[0.025] blur-[180px]" />
+
+        {/* Architectural horizontals */}
+        <div className="absolute left-0 top-[17%] h-px w-full bg-white/[0.035]" />
+        <div className="absolute left-0 top-[48%] h-px w-full bg-white/[0.025]" />
+        <div className="absolute left-0 top-[79%] h-px w-full bg-white/[0.025]" />
+      </div>
+
+      {/* Corner architecture */}
+      <div className="pointer-events-none fixed left-5 top-24 z-20 h-10 w-10 border-l border-t border-white/[0.08] md:left-10" />
+      <div className="pointer-events-none fixed right-5 top-24 z-20 h-10 w-10 border-r border-t border-white/[0.08] md:right-10" />
+
       <NavBar />
-         
-      {/* Pricing Hero Section */}
-      <motion.section
-        className="w-full pt-28 text-xs text-zinc-500 text-center flex flex-col items-center justify-center mt-14 z-10"
-        variants={sectionVariants}
-      >
-        <motion.h1 className="font-semibold tracking-tight uppercase z-10" variants={sectionVariants}>
-          Pricing.
-        </motion.h1>
-      
-      </motion.section>
 
-      {/* Plan Component */}
-      <motion.section className="w-full z-10" variants={sectionVariants}>
-        <Plan />
-      </motion.section>
+      <div className="relative z-10">
 
-      {/* Pricing Features Section */}
-      <motion.section className="w-full z-10" variants={sectionVariants}>
-        <PricingFeatures />
-      </motion.section>
+        {/* ================================================================
+            PLANS
+        ================================================================ */}
 
-      {/* Join Us Section */}
-      <motion.section className="w-full z-10" variants={sectionVariants}>
-        <JoinUs />
-      </motion.section>
+        <section>
+          <Plan />
+        </section>
 
-      {/* Footer Section */}
-      <motion.section className="w-full z-10" variants={sectionVariants}>
+        {/* ================================================================
+            FEATURE MATRIX
+        ================================================================ */}
+
+        <section>
+          <PricingFeatures />
+        </section>
+
+        {/* ================================================================
+            JOIN
+        ================================================================ */}
+
+        <section>
+          <JoinUs />
+        </section>
+
+        {/* ================================================================
+            FOOTER
+        ================================================================ */}
+
         <Footer />
-      </motion.section>
-    </motion.div>
+      </div>
+    </main>
   )
 }

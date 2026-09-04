@@ -1,10 +1,14 @@
-"use client"
+"use client";
 
-import { useState, useRef, useEffect, useCallback } from "react"
-import Image from "next/image"
-import { Arimo } from "next/font/google"
-import { motion, useInView , Variants} from "framer-motion" // Import motion and useInView
-
+import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { Arimo } from "next/font/google";
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  type Variants,
+} from "framer-motion";
 import p1 from "../assets/p1.png"
 import p2 from "../assets/p2.png"
 import p3 from "../assets/p3.png"
@@ -13,281 +17,904 @@ import p5 from "../assets/p5.png"
 import p6 from "../assets/p6.png"
 import p7 from "../assets/p7.jpg"
 
+
 const arimo = Arimo({
-  variable: "--font-arimo",
-  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
-})
+  weight: ["400", "500", "600", "700"],
+});
+
+/* -------------------------------------------------------------------------- */
+/* DATA                                                                       */
+/* Keep your existing testimonial copy if you already have it.               */
+/* -------------------------------------------------------------------------- */
 
 const testimonialsData = [
   {
-    id: "test-1",
+    id: 1,
+    name: "Alex Morgan",
+    role: "Performance Athlete",
+    quote:
+      "Axion completely changed the way I train. Every session has a purpose, every metric tells a story, and the results speak for themselves.",
     avatar: p1,
-    name: "JASON HARVEY",
-    role: "SOMEFOLK",
-    text: "Osmo is full of awesome (and easy to use) interactions that save so much time. They're visually powerful but also robust, and the best thing is, it's only going to get better as more even resources get added! Oh and it doesn't hurt that the dashboard looks sick too.",
+    category: "PERFORMANCE",
   },
   {
-    id: "test-2",
+    id: 2,
+    name: "Sarah Williams",
+    role: "Elite Runner",
+    quote:
+      "For the first time, my training actually feels built around me. Axion gave me structure, precision, and the confidence to keep pushing.",
     avatar: p2,
-    name: "FLAYKS",
-    role: "DESIGNER & FRONT END DEV",
-    text: "It's nice to get access to some creative dev best kept secrets - they're a great a source of inspiration for animations and interactions. Already found out some tricks for some issues that were giving me headaches before! Love how it explains the implementation rather than blindly copy-pasting it, making it much easier to customize.",
+    category: "ENDURANCE",
   },
   {
-    id: "test-3",
+    id: 3,
+    name: "James Carter",
+    role: "Strength Athlete",
+    quote:
+      "This isn't just another gym. The level of detail behind every program makes you realize how much potential you were leaving on the table.",
     avatar: p3,
-    name: "HUY (BY HUY)",
-    role: "WEB DESIGNER & YOUTUBE CREATOR",
-    text: "One of a kind platform for any developers out there. It's incredible to be able to see and learn how the pros implement their animations. If you love web animations and creative development, this platform this a no brainer—just sign up already.",
+    category: "STRENGTH",
   },
   {
-    id: "test-4",
+    id: 4,
+    name: "Emma Davis",
+    role: "Professional Coach",
+    quote:
+      "The difference is consistency. Axion doesn't rely on motivation. It builds a system that keeps you moving forward.",
     avatar: p4,
-    name: "CASSIE EVANS",
-    role: "DEVELOPER EDUCATOR",
-    text: "Even if you know GSAP, you can apply abstract animations to real-world scenarios. Dennis and his team come to the rescue with a treasure trove of useful techniques. There's something for everyone, whether you copy or use the code as a jumping off point, you get the official GSAP stamp of approval.",
+    category: "COACHING",
   },
   {
-    id: "test-5",
+    id: 5,
+    name: "Daniel Brooks",
+    role: "Hybrid Athlete",
+    quote:
+      "I came for better performance and stayed because the entire experience feels engineered. Nothing is random.",
     avatar: p5,
-    name: "ALEX JOHNSON",
-    role: "FITNESS ENTHUSIAST",
-    text: "Axion has completely transformed my approach to fitness. The personalized plans are spot on, and the coaching is truly next level. I've seen results I never thought possible!",
+    category: "HYBRID",
   },
   {
-    id: "test-6",
+    id: 6,
+    name: "Olivia Taylor",
+    role: "Fitness Athlete",
+    quote:
+      "Axion made training measurable without taking away the human side of it. I finally understand what progress actually looks like.",
     avatar: p6,
-    name: "SARAH LEE",
-    role: "NUTRITION COACH",
-    text: "As a nutrition coach, I appreciate Axion's holistic approach. Their nutrition planning tools are fantastic, and the integration with workout plans makes it easy for clients to stay on track.",
+    category: "FITNESS",
   },
   {
-    id: "test-7",
+    id: 7,
+    name: "Michael Anderson",
+    role: "Competitive Athlete",
+    quote:
+      "The system keeps adapting as I improve. That is what makes Axion different — the program evolves with you.",
     avatar: p7,
-    name: "MARK DAVIS",
-    role: "ATHLETE",
-    text: "The fitness challenges keep me motivated and push my limits. Axion provides a competitive yet supportive environment that helps me achieve new personal bests consistently.",
+    category: "ATHLETICS",
   },
-]
+];
 
-// Triple the testimonials data for infinite loop effect
-const displayedTestimonials = [...testimonialsData, ...testimonialsData, ...testimonialsData]
+/* -------------------------------------------------------------------------- */
+/* MOTION                                                                     */
+/* -------------------------------------------------------------------------- */
 
-// Variants for the main container
-const containerVariants : Variants = {
-  hidden: { opacity: 0, y: 50 },
+const revealVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+    filter: "blur(8px)",
+  },
   visible: {
     opacity: 1,
     y: 0,
+    filter: "blur(0px)",
     transition: {
       duration: 0.8,
-      ease: "easeOut",
-      delay: 0.5, // Delay after WhyChooseUs section
-      when: "beforeChildren",
+      ease: [0.22, 1, 0.36, 1],
     },
   },
-}
+};
 
-// Variants for text elements (title, trusted by)
-const textVariants : Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-}
+const staggerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
 
-// Variants for avatar buttons
-const avatarVariants : Variants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.4, ease: "easeOut" } },
-}
-
-// Variants for testimonial cards
-const cardVariants : Variants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } },
-}
+/* -------------------------------------------------------------------------- */
+/* COMPONENT                                                                  */
+/* -------------------------------------------------------------------------- */
 
 export default function Testimonials() {
-  const testimonialsSectionRef = useRef(null)
-  const isInView = useInView(testimonialsSectionRef, { once: true, amount: 0.3 }) // Trigger when 30% in view
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const carouselRef = useRef<HTMLDivElement | null>(null);
 
-  // activeIndex refers to the index within the displayedTestimonials array
-  // We start at the beginning of the middle section for seamless looping
-  const [activeIndex, setActiveIndex] = useState(testimonialsData.length)
-  const testimonialsRef = useRef<HTMLDivElement>(null)
-  const isScrolling = useRef(false) // To prevent re-triggering scroll during programmatic jumps
+  const isInView = useInView(sectionRef, {
+    once: true,
+    amount: 0.15,
+  });
 
-  // Function to scroll to a specific index
+  const [activeIndex, setActiveIndex] = useState(testimonialsData.length);
+  const [isScrolling, setIsScrolling] = useState(false);
+
+  /*
+   * Three copies create the illusion of an infinite carousel.
+   * Starting in the middle copy prevents the user from seeing the edge.
+   */
+  const infiniteTestimonials = [
+    ...testimonialsData,
+    ...testimonialsData,
+    ...testimonialsData,
+  ];
+
+  /* ------------------------------------------------------------------------ */
+  /* CENTER CARD                                                              */
+  /* ------------------------------------------------------------------------ */
+
   const scrollToTestimonial = useCallback(
-    (index: number, behavior: "smooth" | "auto") => {
-      if (testimonialsRef.current) {
-        const targetElement = testimonialsRef.current.children[index] as HTMLElement
-        if (targetElement) {
-          isScrolling.current = true
-          testimonialsRef.current.scrollTo({
-            left: targetElement.offsetLeft - (testimonialsRef.current.offsetWidth - targetElement.offsetWidth) / 2,
-            behavior: behavior,
-          })
-          // Set a timeout to reset isScrolling after the scroll animation (if smooth)
-          // or immediately if auto
-          setTimeout(
-            () => {
-              isScrolling.current = false
-            },
-            behavior === "smooth" ? 500 : 0,
-          ) // Adjust timeout based on scroll behavior
-        }
-      }
+    (index: number, behavior: ScrollBehavior = "smooth") => {
+      const container = carouselRef.current;
+
+      if (!container) return;
+
+      const cards = container.children;
+
+      if (!cards[index]) return;
+
+      const card = cards[index] as HTMLElement;
+
+      const left =
+        card.offsetLeft -
+        container.clientWidth / 2 +
+        card.offsetWidth / 2;
+
+      setIsScrolling(true);
+
+      container.scrollTo({
+        left,
+        behavior,
+      });
+
+      window.setTimeout(
+        () => {
+          setIsScrolling(false);
+        },
+        behavior === "smooth" ? 650 : 50
+      );
     },
-    [], // Dependencies for useCallback
-  )
+    []
+  );
 
-  // Effect to scroll when activeIndex changes
+  /* ------------------------------------------------------------------------ */
+  /* INITIAL POSITION                                                         */
+  /* ------------------------------------------------------------------------ */
+
   useEffect(() => {
-    scrollToTestimonial(activeIndex, "smooth")
-  }, [activeIndex, scrollToTestimonial])
+    const timer = window.setTimeout(() => {
+      scrollToTestimonial(
+        testimonialsData.length,
+        "auto"
+      );
+    }, 50);
 
-  // Handle infinite loop logic on scroll
-  useEffect(() => {
-    const scrollContainer = testimonialsRef.current
+    return () => window.clearTimeout(timer);
+  }, [scrollToTestimonial]);
 
-    const handleScroll = () => {
-      if (!scrollContainer || isScrolling.current) return
+  /* ------------------------------------------------------------------------ */
+  /* SCROLL HANDLER                                                           */
+  /* ------------------------------------------------------------------------ */
 
-      const scrollLeft = scrollContainer.scrollLeft
-      const cardWidth = (scrollContainer.children[0] as HTMLElement)?.offsetWidth + 16 // Card width + mx-2 (8px * 2)
+  const handleScroll = useCallback(() => {
+    const container = carouselRef.current;
 
-      // Calculate the index of the card currently snapped into view (or closest to center)
-      const currentSnappedIndex = Math.round(scrollLeft / cardWidth)
+    if (!container || isScrolling) return;
 
-      // Teleportation logic
-      if (currentSnappedIndex >= testimonialsData.length * 2) {
-        // Scrolled past the second set, jump back to the start of the second set
-        isScrolling.current = true
-        scrollContainer.scrollLeft = testimonialsData.length * cardWidth
-        setTimeout(() => (isScrolling.current = false), 0)
-        setActiveIndex(testimonialsData.length) // Update active index to reflect the jump
-      } else if (currentSnappedIndex < testimonialsData.length) {
-        // Scrolled before the first set, jump forward to the start of the second set
-        isScrolling.current = true
-        scrollContainer.scrollLeft = testimonialsData.length * cardWidth
-        setTimeout(() => (isScrolling.current = false), 0)
-        setActiveIndex(testimonialsData.length) // Update active index to reflect the jump
-      } else {
-        // If within the middle section, update activeIndex normally
-        setActiveIndex(currentSnappedIndex)
+    const cards = Array.from(container.children) as HTMLElement[];
+
+    if (!cards.length) return;
+
+    const center = container.scrollLeft + container.clientWidth / 2;
+
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+
+    cards.forEach((card, index) => {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      const distance = Math.abs(center - cardCenter);
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
       }
+    });
+
+    setActiveIndex(closestIndex);
+
+    /*
+     * Teleport between copies when the user approaches an edge.
+     * This happens without the user visually noticing.
+     */
+    if (closestIndex < testimonialsData.length) {
+      const target =
+        closestIndex + testimonialsData.length;
+
+      window.requestAnimationFrame(() => {
+        scrollToTestimonial(target, "auto");
+        setActiveIndex(target);
+      });
     }
 
-    scrollContainer?.addEventListener("scroll", handleScroll)
-    return () => {
-      scrollContainer?.removeEventListener("scroll", handleScroll)
+    if (
+      closestIndex >=
+      testimonialsData.length * 2
+    ) {
+      const target =
+        closestIndex - testimonialsData.length;
+
+      window.requestAnimationFrame(() => {
+        scrollToTestimonial(target, "auto");
+        setActiveIndex(target);
+      });
     }
-  }, []) // Dependencies for useEffect
+  }, [
+    isScrolling,
+    scrollToTestimonial,
+  ]);
 
-  const handleAvatarClick = (originalIdx: number) => {
-    // When clicking an avatar, target the corresponding testimonial in the middle set
-    setActiveIndex(originalIdx + testimonialsData.length)
-  }
+  /* ------------------------------------------------------------------------ */
+  /* AVATAR NAVIGATION                                                        */
+  /* ------------------------------------------------------------------------ */
 
-  const handleTestimonialClick = (index: number) => {
-    setActiveIndex(index) // Directly set the clicked index
-  }
+  const selectTestimonial = (originalIndex: number) => {
+    const target =
+      testimonialsData.length + originalIndex;
+
+    setActiveIndex(target);
+
+    scrollToTestimonial(target, "smooth");
+  };
+
+  /* ------------------------------------------------------------------------ */
+  /* CURRENT DATA                                                             */
+  /* ------------------------------------------------------------------------ */
+
+  const currentOriginalIndex =
+    ((activeIndex % testimonialsData.length) +
+      testimonialsData.length) %
+    testimonialsData.length;
 
   return (
-    <motion.div
-      ref={testimonialsSectionRef}
-      className={`w-full min-h-[80vh] py-16 bg-black text-white mb-20 flex flex-col items-center ${arimo.className}`}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"} // Animate based on inView status
-      variants={containerVariants}
+    <section
+      ref={sectionRef}
+      className={`${arimo.className} relative overflow-hidden bg-[#050505] text-white`}
     >
-      <motion.h1 className="text-center text-5xl tracking-tight" variants={textVariants}>
-        We built Axion to help athletes <br />
-        and achievers train smarter, <br />
-        harder, and longer.
-      </motion.h1>
-      <div className="w-1/2 flex justify-center">
+      {/* ------------------------------------------------------------------ */}
+      {/* BACKGROUND GRID                                                    */}
+      {/* ------------------------------------------------------------------ */}
+
+      <div className="pointer-events-none absolute inset-0">
         <div
-          className="w-[70%] h-[0.5px] bg-zinc-700 my-7"
+          className="absolute inset-0 opacity-[0.035]"
           style={{
-            maskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
-            WebkitMaskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
+            backgroundImage: `
+              linear-gradient(to right, rgba(255,255,255,.5) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(255,255,255,.5) 1px, transparent 1px)
+            `,
+            backgroundSize: "80px 80px",
           }}
-        ></div>
+        />
+
+        <div className="absolute left-1/2 top-[25%] h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-red-600/[0.045] blur-[140px]" />
+
+        <div className="absolute left-0 top-1/3 h-px w-full bg-white/[0.04]" />
+        <div className="absolute bottom-1/4 left-0 h-px w-full bg-white/[0.03]" />
       </div>
-      <motion.h2 className="text-sm text-zinc-400 mb-3" variants={textVariants}>
-        Trusted by:
-      </motion.h2>
-      {/* Avatars Row */}
-      <motion.div
-        className="flex justify-center items-center mb-8"
-        variants={{
-          visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
-        }}
-      >
-        {testimonialsData.map((testimonial, index) => (
-          <motion.div key={testimonial.id} className="flex flex-col items-center gap-y-2" variants={avatarVariants}>
-            <button
-              onClick={() => handleAvatarClick(index)}
-              className={`relative rounded-full transition-all duration-300 ease-in-out hover:border-[#DC2626] p-1
-                          ${(activeIndex % testimonialsData.length) === index ? "border-2 border-[#DC2626]" : "border-2 border-transparent"}`}
-              aria-label={`View testimonial from ${testimonial.name}`}
-            >
-              <Image
-                src={testimonial.avatar || "/placeholder.svg"}
-                alt={testimonial.name}
-                width={48}
-                height={48}
-                className="rounded-full object-cover size-8"
-              />
-            </button>
-            <span
-              className={`text-xs font-medium text-white bg-zinc-800 uppercase tracking-wider py-1 px-1 rounded-[3px] transition-opacity duration-300 ${
-                (activeIndex % testimonialsData.length) === index ? "opacity-100" : "opacity-0 pointer-events-none"
-              }`}
-            >
-              {testimonial.name.split(" ")[0]}
-            </span>
-          </motion.div>
-        ))}
-      </motion.div>
-      {/* Testimonials Slider */}
-      <div className="relative w-full max-w-6xl">
-        <div
-          ref={testimonialsRef}
-          className="flex overflow-x-scroll no-scrollbar w-full px-4 py-4 scroll-smooth snap-x snap-mandatory items-start relative z-10"
+
+      {/* ------------------------------------------------------------------ */}
+      {/* ARCHITECTURAL CORNERS                                               */}
+      {/* ------------------------------------------------------------------ */}
+
+      <div className="pointer-events-none absolute left-5 top-5 h-12 w-12 border-l border-t border-white/10 md:left-10 md:top-10" />
+
+      <div className="pointer-events-none absolute right-5 top-5 h-12 w-12 border-r border-t border-white/10 md:right-10 md:top-10" />
+
+      <div className="pointer-events-none absolute bottom-5 left-5 h-12 w-12 border-b border-l border-white/10 md:bottom-10 md:left-10" />
+
+      <div className="pointer-events-none absolute bottom-5 right-5 h-12 w-12 border-b border-r border-white/10 md:bottom-10 md:right-10" />
+
+      {/* ------------------------------------------------------------------ */}
+      {/* MAIN                                                                */}
+      {/* ------------------------------------------------------------------ */}
+
+      <div className="relative mx-auto max-w-[1500px] px-5 py-24 sm:px-8 lg:px-12 lg:py-32">
+
+        {/* -------------------------------------------------------------- */}
+        {/* HEADER                                                          */}
+        {/* -------------------------------------------------------------- */}
+
+        <motion.div
+          variants={staggerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="grid gap-10 lg:grid-cols-[0.8fr_2fr_0.7fr]"
         >
-          {displayedTestimonials.map((testimonial, index) => (
-            <motion.div
-              key={`${testimonial.id}-${index}`} // Unique key for duplicated items
-              onClick={() => handleTestimonialClick(index)}
-              className={`flex-shrink-0 w-[calc(100%-4rem)] md:w-[calc(50%-2rem)] lg:w-[calc(33.33%-2rem)] xl:w-[calc(33.33%-2rem)]
-                          mx-1 p-5 bg-zinc-950 rounded-lg border-2 cursor-pointer
-                          transition-all duration-300 ease-in-out transform snap-center
-                          ${activeIndex === index ? "border-[#DC2626] scale-105" : "border-zinc-800 scale-95 opacity-70"}`}
-              variants={cardVariants}
-            >
-              <p className="text-zinc-300 text-sm mb-4">{testimonial.text}</p>
-              <div className="flex items-center mt-auto">
-                <Image
-                  src={testimonial.avatar || "/placeholder.svg"}
-                  alt={testimonial.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full object-cover size-10 mr-3"
-                />
-                <div>
-                  <p className="text-xs text-white">{testimonial.name}</p>
-                  <p className="text-zinc-400 text-xs">{testimonial.role}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+          {/* System label */}
+
+          <motion.div
+            variants={revealVariants}
+            className="flex items-start gap-3"
+          >
+            <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-red-600 shadow-[0_0_12px_rgba(220,38,38,.8)]" />
+
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-red-500">
+                AXION / FIELD REPORTS
+              </p>
+
+              <p className="mt-2 text-[10px] uppercase tracking-[0.18em] text-white/30">
+                Human Performance Division
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Editorial heading */}
+
+          <motion.div
+            variants={revealVariants}
+            className="max-w-4xl"
+          >
+            <p className="mb-5 text-[10px] uppercase tracking-[0.3em] text-white/35">
+              Real people. Real adaptation.
+            </p>
+
+            <h2 className="text-[clamp(2.5rem,6vw,6.8rem)] font-semibold leading-[0.9] tracking-[-0.055em] text-white">
+              The system works
+              <br />
+
+              <span className="text-white/35">
+                when you do.
+              </span>
+            </h2>
+          </motion.div>
+
+          {/* Report number */}
+
+          <motion.div
+            variants={revealVariants}
+            className="flex flex-col justify-end lg:items-end"
+          >
+            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/25">
+              TESTIMONIAL INDEX
+            </div>
+
+            <div className="mt-2 flex items-baseline gap-2">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={currentOriginalIndex}
+                  initial={{
+                    opacity: 0,
+                    y: 8,
+                    filter: "blur(5px)",
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                    filter: "blur(0px)",
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: -8,
+                    filter: "blur(5px)",
+                  }}
+                  transition={{
+                    duration: 0.35,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="font-mono text-3xl font-medium text-white"
+                >
+                  {String(
+                    currentOriginalIndex + 1
+                  ).padStart(2, "0")}
+                </motion.span>
+              </AnimatePresence>
+
+              <span className="font-mono text-sm text-white/20">
+                / {String(testimonialsData.length).padStart(2, "0")}
+              </span>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* -------------------------------------------------------------- */}
+        {/* DIVIDER                                                         */}
+        {/* -------------------------------------------------------------- */}
+
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={
+            isInView
+              ? { scaleX: 1, opacity: 1 }
+              : { scaleX: 0, opacity: 0 }
+          }
+          transition={{
+            duration: 1,
+            delay: 0.25,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="mt-16 origin-left border-t border-white/[0.08]"
+        />
+
+        {/* -------------------------------------------------------------- */}
+        {/* AVATAR NAVIGATION                                               */}
+        {/* -------------------------------------------------------------- */}
+
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={staggerVariants}
+          className="mt-8 flex items-center justify-between gap-6"
+        >
+          <motion.div
+            variants={revealVariants}
+            className="hidden items-center gap-3 sm:flex"
+          >
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/25">
+              SELECT REPORT
+            </span>
+
+            <span className="h-px w-8 bg-white/10" />
+          </motion.div>
+
+          <motion.div
+            variants={revealVariants}
+            className="flex items-center gap-2"
+          >
+            {testimonialsData.map(
+              (testimonial, index) => {
+                const isActive =
+                  index === currentOriginalIndex;
+
+                return (
+                  <button
+                    key={testimonial.id}
+                    type="button"
+                    onClick={() =>
+                      selectTestimonial(index)
+                    }
+                    aria-label={`View testimonial from ${testimonial.name}`}
+                    className="group relative"
+                  >
+                    <motion.div
+                      animate={{
+                        width: isActive
+                          ? 46
+                          : 30,
+                        opacity: isActive ? 1 : 0.45,
+                      }}
+                      transition={{
+                        duration: 0.45,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="relative h-10 overflow-hidden border border-white/10"
+                    >
+                      <Image
+                        src={testimonial.avatar}
+                        alt={testimonial.name}
+                        fill
+                        sizes="46px"
+                        className={`object-cover grayscale transition-all duration-500 ${isActive
+                          ? "grayscale-0"
+                          : "group-hover:grayscale-0"
+                          }`}
+                      />
+
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeAvatar"
+                          className="absolute inset-0 border border-red-600"
+                          transition={{
+                            duration: 0.45,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                        />
+                      )}
+
+                      <div className="absolute inset-x-0 bottom-0 h-[2px] bg-red-600/80" />
+                    </motion.div>
+                  </button>
+                );
+              }
+            )}
+          </motion.div>
+
+          <motion.div
+            variants={revealVariants}
+            className="hidden font-mono text-[9px] uppercase tracking-[0.2em] text-white/20 md:block"
+          >
+            VERIFIED ATHLETE FEEDBACK
+          </motion.div>
+        </motion.div>
+
+        {/* -------------------------------------------------------------- */}
+        {/* TESTIMONIAL CAROUSEL                                            */}
+        {/* -------------------------------------------------------------- */}
+
+        <div className="relative mt-12">
+          {/* Left fade */}
+
+          <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-20 w-[8%] bg-gradient-to-r from-[#050505] to-transparent" />
+
+          {/* Right fade */}
+
+          <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-20 w-[8%] bg-gradient-to-l from-[#050505] to-transparent" />
+
+          <div
+            ref={carouselRef}
+            onScroll={handleScroll}
+            className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-[8%] py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {infiniteTestimonials.map(
+              (testimonial, index) => {
+                const isActive =
+                  index === activeIndex;
+
+                return (
+                  <motion.article
+                    key={`${testimonial.id}-${index}`}
+                    initial={{
+                      opacity: 0,
+                      y: 30,
+                    }}
+                    animate={{
+                      opacity: isActive ? 1 : 0.38,
+                      y: isActive ? 0 : 8,
+                      scale: isActive ? 1 : 0.96,
+                    }}
+                    transition={{
+                      duration: 0.55,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    onClick={() => {
+                      setActiveIndex(index);
+                      scrollToTestimonial(
+                        index,
+                        "smooth"
+                      );
+                    }}
+                    className={`group relative min-w-[84vw] snap-center cursor-pointer overflow-hidden border bg-[#090909] transition-colors duration-500 sm:min-w-[620px] lg:min-w-[700px] ${isActive
+                      ? "border-red-600/60"
+                      : "border-white/[0.07] hover:border-white/15"
+                      }`}
+                  >
+                    {/* Top telemetry */}
+
+                    <div className="flex items-center justify-between border-b border-white/[0.07] px-5 py-4 md:px-7">
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full transition-all duration-500 ${isActive
+                            ? "bg-red-500 shadow-[0_0_12px_rgba(220,38,38,.9)]"
+                            : "bg-white/20"
+                            }`}
+                        />
+
+                        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/35">
+                          FIELD REPORT
+                        </span>
+                      </div>
+
+                      <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/20">
+                        FR-{String(
+                          testimonial.id
+                        ).padStart(3, "0")}
+                      </div>
+                    </div>
+
+                    {/* Main content */}
+
+                    <div className="grid min-h-[430px] md:grid-cols-[190px_1fr]">
+                      {/* Athlete profile */}
+
+                      <div className="relative flex flex-col justify-between border-b border-white/[0.07] p-5 md:border-b-0 md:border-r md:p-7">
+                        <div>
+                          <div className="relative aspect-square w-full overflow-hidden border border-white/10">
+                            <Image
+                              src={testimonial.avatar}
+                              alt={testimonial.name}
+                              fill
+                              sizes="190px"
+                              className={`object-cover grayscale transition-all duration-700 ${isActive
+                                ? "scale-100 grayscale-0"
+                                : "scale-105 grayscale"
+                                }`}
+                            />
+
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+                            {/* Crosshair */}
+
+                            <div className="pointer-events-none absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2">
+                              <div className="absolute left-1/2 top-0 h-full w-px bg-white/25" />
+                              <div className="absolute left-0 top-1/2 h-px w-full bg-white/25" />
+                            </div>
+
+                            {isActive && (
+                              <motion.div
+                                initial={{
+                                  y: "-100%",
+                                }}
+                                animate={{
+                                  y: "100%",
+                                }}
+                                transition={{
+                                  duration: 2.8,
+                                  repeat: Infinity,
+                                  repeatDelay: 1.5,
+                                  ease: "linear",
+                                }}
+                                className="absolute left-0 right-0 h-px bg-red-500/70 shadow-[0_0_12px_rgba(220,38,38,.8)]"
+                              />
+                            )}
+                          </div>
+
+                          <div className="mt-5">
+                            <p className="text-sm font-semibold tracking-tight text-white">
+                              {testimonial.name}
+                            </p>
+
+                            <p className="mt-1 text-[10px] uppercase tracking-[0.15em] text-white/30">
+                              {testimonial.role}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="mt-8">
+                          <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/20">
+                            DISCIPLINE
+                          </p>
+
+                          <p className="mt-1 text-[10px] uppercase tracking-[0.15em] text-red-500">
+                            {testimonial.category}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Quote */}
+
+                      <div className="relative flex flex-col justify-between p-6 md:p-10 lg:p-12">
+                        {/* Giant quote mark */}
+
+                        <span className="pointer-events-none absolute right-7 top-3 select-none font-serif text-[150px] leading-none text-white/[0.025]">
+                          “
+                        </span>
+
+                        <div className="relative">
+                          <div className="mb-8 flex items-center gap-3">
+                            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-red-500">
+                              VERIFIED
+                            </span>
+
+                            <span className="h-px w-10 bg-red-600/50" />
+                          </div>
+
+                          <AnimatePresence
+                            mode="wait"
+                          >
+                            <motion.blockquote
+                              key={testimonial.id}
+                              initial={{
+                                opacity: 0,
+                                y: 18,
+                                filter: "blur(8px)",
+                              }}
+                              animate={{
+                                opacity: 1,
+                                y: 0,
+                                filter: "blur(0px)",
+                              }}
+                              exit={{
+                                opacity: 0,
+                                y: -14,
+                                filter: "blur(8px)",
+                              }}
+                              transition={{
+                                duration: 0.55,
+                                ease: [
+                                  0.22,
+                                  1,
+                                  0.36,
+                                  1,
+                                ],
+                              }}
+                              className="max-w-2xl text-[clamp(1.55rem,3vw,2.8rem)] font-medium leading-[1.12] tracking-[-0.035em] text-white"
+                            >
+                              “{testimonial.quote}”
+                            </motion.blockquote>
+                          </AnimatePresence>
+                        </div>
+
+                        {/* Bottom telemetry */}
+
+                        <div className="mt-12">
+                          <div className="mb-4 flex items-center justify-between font-mono text-[8px] uppercase tracking-[0.2em] text-white/20">
+                            <span>
+                              SYSTEM RESPONSE
+                            </span>
+
+                            <span className="text-red-500">
+                              POSITIVE
+                            </span>
+                          </div>
+
+                          <div className="h-px bg-white/[0.08]">
+                            <motion.div
+                              animate={{
+                                width: isActive
+                                  ? "72%"
+                                  : "18%",
+                              }}
+                              transition={{
+                                duration: 0.8,
+                                ease: [
+                                  0.22,
+                                  1,
+                                  0.36,
+                                  1,
+                                ],
+                              }}
+                              className="h-full bg-red-600"
+                            />
+                          </div>
+
+                          <div className="mt-4 flex items-center justify-between">
+                            <span className="font-mono text-[8px] uppercase tracking-[0.18em] text-white/15">
+                              AXION PERFORMANCE LAB
+                            </span>
+
+                            <span className="font-mono text-[8px] text-white/15">
+                              0{testimonial.id}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Hover scan */}
+
+                        <motion.div
+                          initial={{
+                            x: "-100%",
+                            opacity: 0,
+                          }}
+                          whileHover={{
+                            x: "100%",
+                            opacity: 1,
+                          }}
+                          transition={{
+                            duration: 0.9,
+                            ease: "easeInOut",
+                          }}
+                          className="pointer-events-none absolute left-0 top-0 h-px w-1/2 bg-gradient-to-r from-transparent via-red-500/70 to-transparent"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Active red edge */}
+
+                    <motion.div
+                      animate={{
+                        opacity: isActive ? 1 : 0,
+                      }}
+                      transition={{
+                        duration: 0.35,
+                      }}
+                      className="absolute bottom-0 left-0 h-[2px] w-full bg-red-600"
+                    />
+                  </motion.article>
+                );
+              }
+            )}
+          </div>
         </div>
-        {/* Gradient overlays for slider */}
-        <div className="pointer-events-none absolute inset-0 z-20 mask-gradient" />
+
+        {/* -------------------------------------------------------------- */}
+        {/* BOTTOM CONTROL BAR                                              */}
+        {/* -------------------------------------------------------------- */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 15,
+          }}
+          animate={
+            isInView
+              ? {
+                opacity: 1,
+                y: 0,
+              }
+              : {
+                opacity: 0,
+                y: 15,
+              }
+          }
+          transition={{
+            duration: 0.7,
+            delay: 0.45,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="mt-8 flex flex-col gap-5 border-t border-white/[0.07] pt-5 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div className="flex items-center gap-4">
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/20">
+              DRAG TO EXPLORE
+            </span>
+
+            <div className="hidden h-px w-16 bg-white/10 sm:block" />
+
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-red-500/70">
+              LIVE FEEDBACK
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="h-1 w-1 rounded-full bg-red-500" />
+
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/20">
+              SYSTEM STATUS
+            </span>
+
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/50">
+              OPERATIONAL
+            </span>
+          </div>
+        </motion.div>
+
+        {/* -------------------------------------------------------------- */}
+        {/* CLOSING STATEMENT                                               */}
+        {/* -------------------------------------------------------------- */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 25,
+          }}
+          animate={
+            isInView
+              ? {
+                opacity: 1,
+                y: 0,
+              }
+              : {
+                opacity: 0,
+                y: 25,
+              }
+          }
+          transition={{
+            duration: 0.8,
+            delay: 0.6,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="mt-24 grid gap-8 border-t border-white/[0.08] pt-10 md:grid-cols-[1fr_auto]"
+        >
+          <div>
+            <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-red-500">
+              AXION / PROOF OF WORK
+            </p>
+
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/35">
+              Every result starts with a system.
+              Every system gets better with the
+              person inside it.
+            </p>
+          </div>
+
+          <div className="flex items-end">
+            <span className="text-[clamp(2rem,4vw,4rem)] font-semibold leading-none tracking-[-0.05em] text-white/10">
+              PROGRESS
+            </span>
+          </div>
+        </motion.div>
       </div>
-    </motion.div>
-  )
+    </section>
+  );
 }

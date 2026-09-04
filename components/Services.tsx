@@ -1,9 +1,11 @@
 "use client"
-import { Arimo } from "next/font/google"
+
 import Image from "next/image"
-import { motion, useInView , Variants } from "framer-motion" // Import useInView
-import { useRouter } from "next/navigation" // Import useRouter
-import { useRef } from "react" // Import useRef
+import { Arimo } from "next/font/google"
+import { motion, useInView, type Variants } from "framer-motion"
+import { useRef } from "react"
+import { ArrowUpRight, Activity, ChevronRight } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 import workoutplan from "../assets/report.png"
 import nutritionplanning from "../assets/meal.png"
@@ -19,172 +21,693 @@ const arimo = Arimo({
 const servicesData = [
   {
     id: "workout-plans",
+    number: "01",
     title: "Personalized Workout Plans",
-    description: "Tailored fitness routines based on your body type, goals, and progress.",
+    shortTitle: "TRAINING",
+    description:
+      "Training architecture built around your body, your goals, and the way your performance evolves.",
     icon: workoutplan,
     href: "/services/personalized-workout-plans",
+    metric: "ADAPTIVE",
   },
   {
     id: "nutrition-planning",
+    number: "02",
     title: "Nutrition Planning",
-    description: "Custom diet strategies that complement your workouts and optimize health.",
+    shortTitle: "NUTRITION",
+    description:
+      "Fuel your performance with nutrition strategies designed around your training demands.",
     icon: nutritionplanning,
     href: "/services/nutrition-planning",
+    metric: "PRECISION",
   },
   {
     id: "one-on-one-coaching",
+    number: "03",
     title: "1-on-1 Coaching",
-    description: "Direct guidance, motivation, and feedback from certified trainers.",
+    shortTitle: "COACHING",
+    description:
+      "Direct guidance, accountability, and adjustments from coaches who understand your progress.",
     icon: coaching,
     href: "/services/one-on-one-coaching",
+    metric: "PERSONAL",
   },
   {
     id: "fitness-challenges",
+    number: "04",
     title: "Fitness Challenges",
-    description: "Engaging goals and competitions to keep you motivated and consistent.",
+    shortTitle: "CHALLENGES",
+    description:
+      "Structured challenges that turn consistency into measurable momentum.",
     icon: routine,
     href: "/services/fitness-challenges",
+    metric: "MOMENTUM",
   },
 ]
 
-// Animation variants for the main container
-const containerVariants : Variants = {
-  hidden: { opacity: 0, y: 50 },
+const containerVariants: Variants = {
+  hidden: {
+    opacity: 0,
+  },
+
   visible: {
     opacity: 1,
-    y: 0,
     transition: {
       duration: 0.8,
-      ease: "easeOut",
-      delay: 0.6, // Delay after LogoSlider
-      when: "beforeChildren", // Animate container before children
+      ease: [0.22, 1, 0.36, 1],
+      when: "beforeChildren",
+      staggerChildren: 0.1,
     },
   },
 }
 
-// Animation variants for text elements
-const textVariants : Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-}
+const revealVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 28,
+  },
 
-// Animation variants for individual service cards
-const cardVariants : Variants = {
-  hidden: { opacity: 0, scale: 0.9, y: 20 },
   visible: {
     opacity: 1,
-    scale: 1,
     y: 0,
     transition: {
-      duration: 0.5,
-      ease: "easeOut",
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+}
+
+const cardVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
     },
   },
 }
 
 export default function Services() {
   const router = useRouter()
-  const servicesRef = useRef(null)
-  const isInView = useInView(servicesRef, { once: true, amount: 0.3 }) // Trigger when 30% in view
+  const sectionRef = useRef<HTMLDivElement>(null)
 
-  // Map service IDs to their corresponding flex classes for the uneven layout
-  const serviceFlexClasses: { [key: string]: string } = {
-    "workout-plans": "flex-2 rounded-tl-md",
-    "nutrition-planning": "flex-[1.5] rounded-bl-md",
-    "one-on-one-coaching": "flex-[1.9] rounded-tr-md",
-    "fitness-challenges": "flex-2 rounded-br-md",
-  }
-
-  const handleServiceClick = (href: string) => {
-    router.push(href)
-  }
+  const isInView = useInView(sectionRef, {
+    once: true,
+    amount: 0.2,
+  })
 
   return (
-    <motion.div
-      ref={servicesRef}
-      className={`w-full h-[45rem] p-8 bg-black flex items-center justify-center transition-all text-white ${arimo.className} duration-500 ease-in-out mb-32`}
+    <motion.section
+      ref={sectionRef}
       initial="hidden"
-      animate={isInView ? "visible" : "hidden"} // Animate based on inView status
+      animate={isInView ? "visible" : "hidden"}
       variants={containerVariants}
+      className={`
+        relative
+        w-full
+        overflow-hidden
+        bg-black
+        px-5
+        py-24
+        text-white
+        md:px-8
+        md:py-32
+        ${arimo.className}
+      `}
     >
-      <div className="w-full h-full rounded-md flex flex-col gap-9">
-        <motion.div className="flex justify-center items-center py-4" variants={textVariants}>
-          <h1 className="text-5xl text-center tracking-tight">
-            Precision-crafted for those who want more <br />
-            than just a workout.
-          </h1>
-        </motion.div>
-        {/* Grid view only (no onClick) */}
-        <div className="w-full h-full grid grid-cols-2 gap-1 rounded-md">
-          {/* Left Column */}
-          <div className="flex flex-col w-full h-full gap-1">
-            {/* Personalized Workout Plans */}
-            <motion.div
-              className={`flex-2 flex flex-col items-center justify-center p-6 rounded-md transition-all duration-300 hover:cursor-pointer ease-in-out
-                           bg-zinc-950 hover:scale-[1.02] border border-zinc-800 hover:border-[#DC2626] ${serviceFlexClasses["workout-plans"]}`}
-              onClick={() => handleServiceClick(servicesData[0].href)}
-              variants={cardVariants}
+      {/* =====================================================
+          AMBIENT BACKGROUND
+      ===================================================== */}
+
+      <div className="pointer-events-none absolute inset-0">
+        {/* subtle vertical center light */}
+        <div
+          className="
+            absolute
+            left-1/2
+            top-[20%]
+            h-[500px]
+            w-[500px]
+            -translate-x-1/2
+            rounded-full
+            bg-[#DC2626]/[0.025]
+            blur-[120px]
+          "
+        />
+
+        {/* technical grid */}
+        <div
+          className="
+            absolute
+            inset-0
+            opacity-[0.035]
+          "
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, #ffffff 1px, transparent 1px),
+              linear-gradient(to bottom, #ffffff 1px, transparent 1px)
+            `,
+            backgroundSize: "80px 80px",
+          }}
+        />
+      </div>
+
+      <div className="relative mx-auto max-w-[1400px]">
+        {/* =====================================================
+            SECTION HEADER
+        ===================================================== */}
+
+        <motion.div
+          variants={revealVariants}
+          className="
+            mb-14
+            flex
+            flex-col
+            justify-between
+            gap-10
+            md:mb-16
+            md:flex-row
+            md:items-end
+          "
+        >
+          <div>
+            {/* eyebrow */}
+            <div className="mb-6 flex items-center gap-3">
+              <span className="h-px w-8 bg-[#DC2626]" />
+
+              <span className="text-[9px] font-medium tracking-[0.3em] text-zinc-500">
+                AXION / PERFORMANCE SYSTEMS
+              </span>
+            </div>
+
+            <h2
+              className="
+                max-w-3xl
+                text-4xl
+                font-medium
+                leading-[1.02]
+                tracking-[-0.045em]
+                text-white
+                sm:text-5xl
+                md:text-6xl
+              "
             >
-              <Image
-                src={servicesData[0].icon || "/placeholder.svg"}
-                alt={servicesData[0].title}
-                className="size-16 mb-4"
-              />
-              <h3 className="text-4xl font-medium mb-2 text-white">{servicesData[0].title}</h3>
-              <p className="text-zinc-400 text-center text-sm">{servicesData[0].description}</p>
-            </motion.div>
-            {/* Nutrition Planning */}
-            <motion.div
-              className={`flex-[1.5] flex flex-col items-center justify-center p-6 rounded-md transition-all duration-300 hover:cursor-pointer ease-in-out
-                           bg-zinc-950 hover:scale-[1.02] border border-zinc-800 hover:border-[#DC2626] ${serviceFlexClasses["nutrition-planning"]}`}
-              onClick={() => handleServiceClick(servicesData[1].href)}
-              variants={cardVariants}
-            >
-              <Image
-                src={servicesData[1].icon || "/placeholder.svg"}
-                alt={servicesData[1].title}
-                className="size-16 mb-4"
-              />
-              <h3 className="text-4xl font-medium mb-2 text-white">{servicesData[1].title}</h3>
-              <p className="text-zinc-400 text-center text-sm">{servicesData[1].description}</p>
-            </motion.div>
+              More than a workout.
+              <br />
+
+              <span className="text-zinc-600">
+                A system built around you.
+              </span>
+            </h2>
           </div>
 
-          {/* Right Column */}
-          <div className="flex flex-col w-full h-full gap-1">
-            {/* 1-on-1 Coaching */}
-            <motion.div
-              className={`flex-[1.9] flex flex-col items-center justify-center p-6 rounded-md transition-all duration-300 hover:cursor-pointer ease-in-out
-                           bg-zinc-950 hover:scale-[1.02] border border-zinc-800 hover:border-[#DC2626] ${serviceFlexClasses["one-on-one-coaching"]}`}
-              onClick={() => handleServiceClick(servicesData[2].href)}
-              variants={cardVariants}
+          {/* right metadata */}
+          <div className="max-w-xs md:pb-1">
+            <div className="mb-3 flex items-center gap-2">
+              <Activity className="size-3 text-[#DC2626]" />
+
+              <span className="text-[9px] uppercase tracking-[0.25em] text-zinc-500">
+                Integrated approach
+              </span>
+            </div>
+
+            <p className="text-xs leading-5 text-zinc-600">
+              Training, nutrition, coaching and consistency working as one
+              performance system.
+            </p>
+          </div>
+        </motion.div>
+
+        {/* =====================================================
+            SYSTEM INDEX
+        ===================================================== */}
+
+        <motion.div
+          variants={revealVariants}
+          className="
+            mb-5
+            flex
+            items-center
+            justify-between
+            border-y
+            border-zinc-900
+            py-3
+          "
+        >
+          <span className="text-[8px] uppercase tracking-[0.3em] text-zinc-700">
+            Performance protocols
+          </span>
+
+          <span className="text-[8px] tabular-nums tracking-[0.2em] text-zinc-700">
+            04 SYSTEMS / 01 OBJECTIVE
+          </span>
+        </motion.div>
+
+        {/* =====================================================
+            SERVICE GRID
+        ===================================================== */}
+
+        <div className="grid grid-cols-1 gap-2 lg:grid-cols-12">
+          {/* ===================================================
+              PRIMARY SERVICE
+          =================================================== */}
+
+          <motion.div
+            variants={cardVariants}
+            onClick={() => router.push(servicesData[0].href)}
+            className="
+              group
+              relative
+              min-h-[500px]
+              cursor-pointer
+              overflow-hidden
+              border
+              border-zinc-900
+              bg-zinc-[950]
+              p-7
+              transition-colors
+              duration-500
+              hover:border-zinc-700
+              lg:col-span-7
+            "
+          >
+            {/* large background number */}
+            <div
+              className="
+                pointer-events-none
+                absolute
+                -right-5
+                -top-16
+                select-none
+                text-[260px]
+                font-bold
+                leading-none
+                tracking-[-0.1em]
+                text-white/[0.018]
+              "
             >
-              <Image
-                src={servicesData[2].icon || "/placeholder.svg"}
-                alt={servicesData[2].title}
-                className="size-16 mb-4"
-              />
-              <h3 className="text-4xl font-medium mb-2 text-white">{servicesData[2].title}</h3>
-              <p className="text-zinc-400 text-center text-sm">{servicesData[2].description}</p>
-            </motion.div>
-            {/* Fitness Challenges */}
+              01
+            </div>
+
+            {/* red scanning line */}
             <motion.div
-              className={`flex-2 flex flex-col items-center justify-center p-6 rounded-md transition-all duration-300 hover:cursor-pointer ease-in-out
-                           bg-zinc-950 hover:scale-[1.02] border border-zinc-800 hover:border-[#DC2626] ${serviceFlexClasses["fitness-challenges"]}`}
-              onClick={() => handleServiceClick(servicesData[3].href)}
-              variants={cardVariants}
-            >
-              <Image
-                src={servicesData[3].icon || "/placeholder.svg"}
-                alt={servicesData[3].title}
-                className="size-16 mb-4"
+              className="
+                absolute
+                left-0
+                top-0
+                h-px
+                w-full
+                origin-left
+                bg-[#DC2626]
+                opacity-0
+                transition-opacity
+                duration-500
+                group-hover:opacity-100
+              "
+              initial={{ scaleX: 0 }}
+              whileHover={{ scaleX: 1 }}
+              transition={{ duration: 0.6 }}
+            />
+
+            {/* top metadata */}
+            <div className="relative flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] tabular-nums text-[#DC2626]">
+                  / {servicesData[0].number}
+                </span>
+
+                <span className="h-px w-8 bg-zinc-800" />
+
+                <span className="text-[9px] uppercase tracking-[0.25em] text-zinc-600">
+                  {servicesData[0].shortTitle}
+                </span>
+              </div>
+
+              <ArrowUpRight
+                className="
+                  size-5
+                  text-zinc-700
+                  transition-all
+                  duration-300
+                  group-hover:-translate-y-1
+                  group-hover:translate-x-1
+                  group-hover:text-[#DC2626]
+                "
               />
-              <h3 className="text-4xl font-medium mb-2 text-white">{servicesData[3].title}</h3>
-              <p className="text-zinc-400 text-center text-sm">{servicesData[3].description}</p>
-            </motion.div>
+            </div>
+
+            {/* center visual */}
+            <div
+              className="
+                absolute
+                left-1/2
+                top-1/2
+                flex
+                -translate-x-1/2
+                -translate-y-1/2
+                items-center
+                justify-center
+              "
+            >
+              <div
+                className="
+                  absolute
+                  size-44
+                  rounded-full
+                  border
+                  border-zinc-900
+                  transition-all
+                  duration-700
+                  group-hover:size-52
+                  group-hover:border-[#DC2626]/30
+                "
+              />
+
+              <div
+                className="
+                  absolute
+                  size-28
+                  rounded-full
+                  border
+                  border-zinc-800
+                  transition-all
+                  duration-700
+                  group-hover:size-36
+                "
+              />
+
+              <div
+                className="
+                  relative
+                  flex
+                  size-20
+                  items-center
+                  justify-center
+                  border
+                  border-zinc-800
+                  bg-black
+                  transition-all
+                  duration-500
+                  group-hover:border-[#DC2626]
+                  group-hover:shadow-[0_0_50px_rgba(220,38,38,0.12)]
+                "
+              >
+                <Image
+                  src={servicesData[0].icon}
+                  alt={servicesData[0].title}
+                  className="
+                    size-10
+                    object-contain
+                    opacity-50
+                    grayscale
+                    transition-all
+                    duration-500
+                    group-hover:scale-110
+                    group-hover:opacity-100
+                    group-hover:grayscale-0
+                  "
+                />
+              </div>
+
+              {/* crosshair */}
+              <span className="absolute -top-4 left-1/2 h-8 w-px -translate-x-1/2 bg-zinc-800" />
+              <span className="absolute -bottom-4 left-1/2 h-8 w-px -translate-x-1/2 bg-zinc-800" />
+              <span className="absolute -left-4 top-1/2 h-px w-8 -translate-y-1/2 bg-zinc-800" />
+              <span className="absolute -right-4 top-1/2 h-px w-8 -translate-y-1/2 bg-zinc-800" />
+            </div>
+
+            {/* bottom content */}
+            <div className="absolute inset-x-7 bottom-7">
+              <div className="mb-4 flex items-center gap-2">
+                <span className="size-1.5 rounded-full bg-[#DC2626]" />
+
+                <span className="text-[8px] uppercase tracking-[0.25em] text-zinc-600">
+                  {servicesData[0].metric}
+                </span>
+              </div>
+
+              <h3
+                className="
+                  max-w-lg
+                  text-3xl
+                  font-medium
+                  leading-tight
+                  tracking-[-0.03em]
+                  text-white
+                  transition-colors
+                  duration-300
+                  group-hover:text-zinc-200
+                  md:text-4xl
+                "
+              >
+                {servicesData[0].title}
+              </h3>
+
+              <div className="mt-4 flex items-end justify-between gap-8">
+                <p className="max-w-md text-xs leading-5 text-zinc-600 transition-colors duration-300 group-hover:text-zinc-400">
+                  {servicesData[0].description}
+                </p>
+
+                <div className="hidden shrink-0 items-center gap-2 text-[9px] uppercase tracking-[0.2em] text-zinc-700 transition-colors duration-300 group-hover:text-[#DC2626] sm:flex">
+                  Explore
+                  <ChevronRight className="size-3" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* ===================================================
+              SECONDARY SERVICES
+          =================================================== */}
+
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 lg:col-span-5 lg:grid-cols-1">
+            {servicesData.slice(1).map((service) => (
+              <ServiceRow
+                key={service.id}
+                service={service}
+                onClick={() => router.push(service.href)}
+              />
+            ))}
           </div>
         </div>
+
+        {/* =====================================================
+            BOTTOM SYSTEM STATEMENT
+        ===================================================== */}
+
+        <motion.div
+          variants={revealVariants}
+          className="
+            mt-5
+            flex
+            flex-col
+            gap-4
+            border-t
+            border-zinc-900
+            pt-5
+            sm:flex-row
+            sm:items-center
+            sm:justify-between
+          "
+        >
+          <p className="text-[9px] uppercase tracking-[0.25em] text-zinc-700">
+            Your body is the project.
+          </p>
+
+          <div className="flex items-center gap-3">
+            <span className="text-[9px] tabular-nums text-zinc-700">
+              AX / 04
+            </span>
+
+            <div className="h-px w-12 bg-zinc-800" />
+
+            <span className="text-[9px] uppercase tracking-[0.25em] text-zinc-500">
+              Start building
+            </span>
+
+            <span className="flex size-6 items-center justify-center border border-zinc-800">
+              <ArrowUpRight className="size-3 text-[#DC2626]" />
+            </span>
+          </div>
+        </motion.div>
       </div>
+    </motion.section>
+  )
+}
+
+/* =========================================================
+   SECONDARY SERVICE ROW
+========================================================= */
+
+function ServiceRow({
+  service,
+  onClick,
+}: {
+  service: (typeof servicesData)[number]
+  onClick: () => void
+}) {
+  return (
+    <motion.div
+      variants={cardVariants}
+      onClick={onClick}
+      whileHover="hover"
+      initial="initial"
+      className="
+        group
+        relative
+        min-h-[160px]
+        cursor-pointer
+        overflow-hidden
+        border
+        border-zinc-900
+        bg-zinc-[950]
+        p-5
+        transition-colors
+        duration-500
+        hover:border-zinc-700
+      "
+    >
+      {/* top red indicator */}
+      <motion.div
+        variants={{
+          initial: {
+            scaleX: 0,
+          },
+          hover: {
+            scaleX: 1,
+          },
+        }}
+        transition={{
+          duration: 0.4,
+          ease: "easeOut",
+        }}
+        className="
+          absolute
+          left-0
+          top-0
+          h-px
+          w-full
+          origin-left
+          bg-[#DC2626]
+        "
+      />
+
+      {/* number + arrow */}
+      <div className="flex items-center justify-between">
+        <span className="text-[9px] tabular-nums text-zinc-700 transition-colors duration-300 group-hover:text-[#DC2626]">
+          / {service.number}
+        </span>
+
+        <ArrowUpRight
+          className="
+            size-4
+            text-zinc-700
+            transition-all
+            duration-300
+            group-hover:-translate-y-1
+            group-hover:translate-x-1
+            group-hover:text-[#DC2626]
+          "
+        />
+      </div>
+
+      {/* service content */}
+      <div className="mt-7 flex items-center gap-5">
+        <div
+          className="
+            flex
+            size-12
+            shrink-0
+            items-center
+            justify-center
+            border
+            border-zinc-900
+            bg-black
+            transition-all
+            duration-300
+            group-hover:border-zinc-700
+          "
+        >
+          <Image
+            src={service.icon}
+            alt={service.title}
+            className="
+              size-6
+              object-contain
+              opacity-40
+              grayscale
+              transition-all
+              duration-300
+              group-hover:scale-110
+              group-hover:opacity-90
+              group-hover:grayscale-0
+            "
+          />
+        </div>
+
+        <div className="min-w-0">
+          <div className="mb-1 flex items-center gap-2">
+            <span className="text-[8px] uppercase tracking-[0.2em] text-zinc-700">
+              {service.metric}
+            </span>
+          </div>
+
+          <h3
+            className="
+              text-lg
+              font-medium
+              leading-tight
+              tracking-[-0.02em]
+              text-zinc-300
+              transition-colors
+              duration-300
+              group-hover:text-white
+            "
+          >
+            {service.title}
+          </h3>
+        </div>
+      </div>
+
+      {/* description */}
+      <p
+        className="
+          mt-4
+          max-w-lg
+          text-[10px]
+          leading-4
+          text-zinc-700
+          transition-colors
+          duration-300
+          group-hover:text-zinc-500
+        "
+      >
+        {service.description}
+      </p>
+
+      {/* background number */}
+      <span
+        className="
+          pointer-events-none
+          absolute
+          -bottom-8
+          -right-2
+          select-none
+          text-[110px]
+          font-bold
+          leading-none
+          tracking-[-0.1em]
+          text-white/[0.015]
+        "
+      >
+        {service.number}
+      </span>
     </motion.div>
   )
 }
